@@ -1,0 +1,22 @@
+/* Shared by dudeanddaddy.com and cleanuponaislescream.com: the header (menu + theme toggle) and the footer.
+   Uses the site tokens (--bg --panel --ink --muted --yellow --redtext --tile1 --shadow --disp --body --mono). */
+.sitehead{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:3px solid var(--ink)}
+.sitehead .in{max-width:1160px;margin-inline:auto;padding:10px max(16px,env(safe-area-inset-left,0px));display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.sitehead .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
+.sitehead .brand img{width:38px;height:38px}
+.sitehead .brand b{font:400 1.1rem var(--disp);letter-spacing:.02em}
+.sitehead nav{display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+.sitehead nav a{padding:.4rem .75rem;border-radius:999px;text-decoration:none;font:800 .92rem var(--body);color:var(--ink);border:2px solid transparent}
+.sitehead nav a:hover{background:var(--panel)}
+.sitehead nav a[aria-current="page"]{background:var(--yellow);color:#1B0F36;border-color:#1B0F36}
+.shift{font:800 .9rem var(--body);cursor:pointer;color:var(--ink);background:var(--panel);border:3px solid var(--ink);border-radius:999px;padding:.35rem .9rem;box-shadow:4px 4px 0 var(--shadow);margin-left:6px}
+.shift:hover{transform:translate(1px,1px);box-shadow:3px 3px 0 var(--shadow)}
+.sitefoot{border-top:5px solid var(--ink);background:var(--tile1);padding:30px max(16px,env(safe-area-inset-left,0px)) 36px}
+.sitefoot .in{max-width:1160px;margin-inline:auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:24px}
+.sitefoot h3{font:500 .78rem var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--redtext);margin:0 0 8px}
+.sitefoot ul{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.sitefoot a{color:var(--ink);font-weight:700}
+.sitefoot p{margin:0 0 6px;color:var(--muted);font-size:.95rem}
+.sitefoot .big{font:400 1.2rem var(--disp);color:var(--ink)}
+.skip{position:absolute;left:-999px}.skip:focus{left:8px;top:8px;background:var(--yellow);color:#1B0F36;padding:8px 12px;z-index:99;border-radius:8px}
+@media (max-width:640px){.sitehead .in{justify-content:center}.sitehead nav{justify-content:center}}

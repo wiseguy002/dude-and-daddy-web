@@ -31,9 +31,10 @@
 @font-face{font-family:"DM Mono";font-style:normal;font-weight:500;font-display:swap;src:url(/fonts/dm-mono-500.woff2) format("woff2")}
 html{-webkit-text-size-adjust:100%}</style>
 <style>
-:root{--bg:#F6F7FF;--panel:#FFFFFF;--ink:#1B0F36;--muted:#54497A;--yellow:#FFD21F;--red:#FF3D55;--shadow:#1B0F36;--soft:#ECEAFC;--blue:#2F7BFF;--redtext:#C8243D;
+:root{--bg:#F6F7FF;--panel:#FFFFFF;--ink:#1B0F36;--muted:#54497A;--yellow:#FFD21F;--red:#FF3D55;--shadow:#1B0F36;--soft:#ECEAFC;--tile1:#ECEAFC;--line:#1B0F36;--blue:#2F7BFF;--redtext:#C8243D;
 --disp:"Bowlby One","Arial Black",Impact,sans-serif;--body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;--mono:"DM Mono",ui-monospace,Menlo,monospace}
-@media (prefers-color-scheme: dark){:root{--bg:#1B0F36;--panel:#2B1A52;--ink:#F6F7FF;--muted:#BFB3E0;--shadow:#080314;--soft:#231443;--redtext:#FF7A8C;color-scheme:dark}}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#1B0F36;--panel:#2B1A52;--ink:#F6F7FF;--muted:#BFB3E0;--shadow:#080314;--soft:#231443;--tile1:#231443;--redtext:#FF7A8C;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1B0F36;--panel:#2B1A52;--ink:#F6F7FF;--muted:#BFB3E0;--shadow:#080314;--soft:#231443;--tile1:#231443;--redtext:#FF7A8C;color-scheme:dark}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:500 17px/1.65 var(--body);-webkit-font-smoothing:antialiased}
 a{color:inherit}
@@ -50,33 +51,31 @@ ul{padding-left:1.2rem}
 </style>
 </head>
 <body>
-<style>
+<style>/* Shared by dudeanddaddy.com and cleanuponaislescream.com: the header (menu + theme toggle) and the footer.
+   Uses the site tokens (--bg --panel --ink --muted --yellow --redtext --tile1 --shadow --disp --body --mono). */
 .sitehead{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:3px solid var(--ink)}
-.sitehead .in{max-width:1100px;margin-inline:auto;padding:10px max(16px,env(safe-area-inset-left,0px));display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.sitehead .in{max-width:1160px;margin-inline:auto;padding:10px max(16px,env(safe-area-inset-left,0px));display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
 .sitehead .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
 .sitehead .brand img{width:38px;height:38px}
 .sitehead .brand b{font:400 1.1rem var(--disp);letter-spacing:.02em}
 .sitehead nav{display:flex;align-items:center;gap:4px;flex-wrap:wrap}
-.sitehead nav a{padding:.4rem .75rem;border-radius:999px;text-decoration:none;font:800 .92rem var(--body);color:var(--ink)}
+.sitehead nav a{padding:.4rem .75rem;border-radius:999px;text-decoration:none;font:800 .92rem var(--body);color:var(--ink);border:2px solid transparent}
 .sitehead nav a:hover{background:var(--panel)}
-.sitehead nav a[aria-current="page"]{background:var(--yellow);color:#1B0F36;border:2px solid #1B0F36;padding:.3rem .65rem}
-.crumbs{max-width:1100px;margin-inline:auto;padding:0 max(16px,env(safe-area-inset-left,0px)) 8px;font:500 .78rem var(--mono);letter-spacing:.06em;color:var(--muted)}
-.crumbs ol{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:4px}
-.crumbs li+li::before{content:"\203A";margin-right:4px}
-.crumbs a{color:var(--muted)}
-.crumbs [aria-current]{color:var(--ink);font-weight:500}
-.sitefoot{border-top:5px solid var(--ink);background:var(--soft);padding:30px max(16px,env(safe-area-inset-left,0px)) 36px;margin-top:0}
-.sitefoot .in{max-width:1100px;margin-inline:auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:24px}
+.sitehead nav a[aria-current="page"]{background:var(--yellow);color:#1B0F36;border-color:#1B0F36}
+.shift{font:800 .9rem var(--body);cursor:pointer;color:var(--ink);background:var(--panel);border:3px solid var(--ink);border-radius:999px;padding:.35rem .9rem;box-shadow:4px 4px 0 var(--shadow);margin-left:6px}
+.shift:hover{transform:translate(1px,1px);box-shadow:3px 3px 0 var(--shadow)}
+.sitefoot{border-top:5px solid var(--ink);background:var(--tile1);padding:30px max(16px,env(safe-area-inset-left,0px)) 36px}
+.sitefoot .in{max-width:1160px;margin-inline:auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:24px}
 .sitefoot h3{font:500 .78rem var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--redtext);margin:0 0 8px}
 .sitefoot ul{list-style:none;margin:0;padding:0;display:grid;gap:6px}
 .sitefoot a{color:var(--ink);font-weight:700}
 .sitefoot p{margin:0 0 6px;color:var(--muted);font-size:.95rem}
 .sitefoot .big{font:400 1.2rem var(--disp);color:var(--ink)}
 .skip{position:absolute;left:-999px}.skip:focus{left:8px;top:8px;background:var(--yellow);color:#1B0F36;padding:8px 12px;z-index:99;border-radius:8px}
-@media (max-width:560px){.sitehead .in{justify-content:center}.sitehead nav{justify-content:center}}
+@media (max-width:640px){.sitehead .in{justify-content:center}.sitehead nav{justify-content:center}}
 </style>
 <a class="skip" href="#main">Skip to content</a>
-<header class="sitehead"><div class="in"><a class="brand" href="/" aria-label="DUDE and DADDY home"><img src="/favicon.svg" alt="" width="38" height="38"><b>DUDE &amp; DADDY</b></a><nav aria-label="Main"><a href="/">Home</a><a href="https://cleanuponaislescream.com/">The game</a><a href="https://cleanuponaislescream.com/how-to-play/">How to play</a><a href="https://cleanuponaislescream.com/updates/">What&rsquo;s new</a><a href="/press/" aria-current="page">Press kit</a></nav></div><div class="crumbs"><ol aria-label="You are here"><li><a href="/">Home</a></li><li aria-current="page">Press kit</li></ol></div></header>
+<header class="sitehead"><div class="in"><a class="brand" href="/" aria-label="DUDE and DADDY home"><img src="/favicon.svg" alt="" width="38" height="38"><b>DUDE &amp; DADDY</b></a><nav aria-label="Main"><a href="/">Home</a><a href="https://cleanuponaislescream.com/" data-x>The game</a><a href="https://cleanuponaislescream.com/how-to-play/" data-x>How to play</a><a href="https://cleanuponaislescream.com/updates/" data-x>What&rsquo;s new</a><a href="/press/" aria-current="page">Press kit</a><button class="shift" id="shift" type="button" aria-pressed="false">Night shift</button></nav></div></header>
 <style>.shots{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:12px}.shots img{width:100%;height:auto;border:3px solid var(--ink);border-radius:12px;box-shadow:4px 4px 0 var(--shadow)}dl{display:grid;grid-template-columns:max-content 1fr;gap:6px 18px}dt{font:500 .78rem var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--redtext);padding-top:4px}dd{margin:0}.logos{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:12px}.logos div{border:3px solid var(--ink);border-radius:12px;padding:12px;background:#fff;display:flex;align-items:center;justify-content:center;min-height:110px}.logos div.dk{background:#1B0F36}.logos img{max-width:100%;max-height:90px}</style>
 <div class="wrap" id="main">
   
@@ -138,7 +137,25 @@ ul{padding-left:1.2rem}
 <footer class="sitefoot"><div class="in">
   <div><p class="big">DUDE &amp; DADDY LLC</p><p>A father-and-son game studio.<br>Baton Rouge, Louisiana &middot; Est. 2026</p><p>Made by a father and a son. Mop included.</p></div>
   <div><h3>The studio</h3><ul><li><a href="/">Home</a></li><li><a href="/press/">Press kit</a></li><li><a href="/privacy/">Privacy</a></li><li><a href="mailto:robewise@gmail.com">Contact</a></li></ul></div>
-  <div><h3>Clean Up On Aisle Scream!</h3><ul><li><a href="https://cleanuponaislescream.com/">Play the game</a></li><li><a href="https://cleanuponaislescream.com/how-to-play/">How to play</a></li><li><a href="https://cleanuponaislescream.com/updates/">What&rsquo;s new</a></li><li><a href="https://cleanuponaislescream.com/privacy/">Game privacy</a></li></ul></div>
+  <div><h3>Clean Up On Aisle Scream!</h3><ul><li><a href="https://cleanuponaislescream.com/" data-x>Play the game</a></li><li><a href="https://cleanuponaislescream.com/how-to-play/" data-x>How to play</a></li><li><a href="https://cleanuponaislescream.com/updates/" data-x>What&rsquo;s new</a></li><li><a href="https://cleanuponaislescream.com/privacy/" data-x>Game privacy</a></li></ul></div>
 </div></footer>
+<script>(function(){
+  var root=document.documentElement, K='dd-shift', btn=document.getElementById('shift');
+  function store(v){try{localStorage.setItem(K,v)}catch(e){}}
+  var m=/[?&]shift=(dark|light)/.exec(location.search), saved=null;
+  try{saved=localStorage.getItem(K)}catch(e){}
+  if(m){root.setAttribute('data-theme',m[1]);store(m[1]);}
+  else if(saved==='dark'||saved==='light'){root.setAttribute('data-theme',saved);}
+  function dark(){var t=root.getAttribute('data-theme');if(t)return t==='dark';return !!(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches);}
+  function label(){var d=dark();btn.textContent=d?'Day shift':'Night shift';btn.setAttribute('aria-pressed',d?'true':'false');}
+  label();
+  btn.addEventListener('click',function(){var n=dark()?'light':'dark';root.setAttribute('data-theme',n);store(n);label();});
+  document.addEventListener('click',function(e){
+    var a=e.target.closest&&e.target.closest('a[data-x]'); if(!a)return;
+    var t=root.getAttribute('data-theme'); if(!t)return;
+    try{var u=new URL(a.href);u.searchParams.set('shift',t);a.href=u.href;}catch(x){}
+  });
+})();
+</script>
 </body>
 </html>
