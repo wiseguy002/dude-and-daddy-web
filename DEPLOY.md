@@ -28,7 +28,7 @@ Commit a change to main. Cloudflare publishes it in about a minute. Other branch
 private preview link. Roll back any time from the Deployments tab.
 
 ## Before sharing widely
-- The contact email on the privacy page is robewise@gmail.com (site/privacy/index.html).
+- The contact email on the privacy and press pages is hello@dudeanddaddy.com (Cloudflare Email Routing forwards it to the owner).
 - Have an attorney glance at the privacy page, especially since the game has nicknames and
   online play. The game needs its own privacy notice for COPPA.
 - Confirm DUDE & DADDY LLC is fully filed with the Louisiana Secretary of State.
