@@ -73,9 +73,31 @@ ul{padding-left:1.2rem}
 .sitefoot .big{font:400 1.2rem var(--disp);color:var(--ink)}
 .skip{position:absolute;left:-999px}.skip:focus{left:8px;top:8px;background:var(--yellow);color:#1B0F36;padding:8px 12px;z-index:99;border-radius:8px}
 @media (max-width:640px){.sitehead .in{justify-content:center}.sitehead nav{justify-content:center}}
+/* 📢 the PA bar */
+.pabar{background:var(--yellow);color:#1B0F36;border-bottom:3px solid #1B0F36;font:800 .9rem/1.3 var(--body)}
+.pabar .in{max-width:1160px;margin-inline:auto;padding:6px max(16px,env(safe-area-inset-left,0px));display:flex;align-items:center;gap:10px}
+.pabar b{font:500 .72rem var(--mono);letter-spacing:.14em;text-transform:uppercase;white-space:nowrap;background:#1B0F36;color:var(--yellow);border-radius:6px;padding:2px 8px}
+.pabar #pamsg{flex:1;min-width:0}
+.pabar button{font:800 .8rem var(--body);cursor:pointer;background:transparent;color:#1B0F36;border:2px solid #1B0F36;border-radius:999px;padding:0 .55rem;min-height:26px}
+html[data-season=halloween] .pabar{background:#FF8A1F}
+html[data-season=thanksgiving] .pabar{background:#E9A23B}
+html[data-season=christmas] .pabar{background:#7DDF7A}
+html[data-season=newyear] .pabar{background:#8FB6FF}
+html[data-season=valentines] .pabar{background:#FF9BB0}
+html[data-season=easter] .pabar{background:#C9B6FF}
+@media (max-width:560px){.pabar b{display:none}}
+/* 🥚 secrets */
+.ddtoast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:100;max-width:min(92vw,520px);background:#1B0F36;color:#F6F7FF;border:3px solid var(--yellow);border-radius:14px;padding:10px 16px;font:700 .95rem/1.4 var(--body);box-shadow:5px 5px 0 rgba(0,0,0,.35)}
+.ddfly{position:fixed;z-index:90;font-size:3rem;pointer-events:none}
+.fly-x{bottom:20%;left:-20%;animation:ddx 4.5s linear forwards}
+.fly-y{bottom:-10%;left:40%;animation:ddy 4.5s ease-in forwards}
+.drop{top:-15%;left:45%;animation:ddd 3.5s cubic-bezier(.3,1.6,.5,1) forwards;font-size:5rem}
+@keyframes ddx{to{left:110%}}@keyframes ddy{to{bottom:110%}}@keyframes ddd{60%{top:35%}100%{top:120%}}
+.hint{font:500 .78rem var(--mono);color:var(--muted)}
 </style>
 <a class="skip" href="#main">Skip to content</a>
-<header class="sitehead"><div class="in"><a class="brand" href="/" aria-label="DUDE and DADDY home"><img src="/favicon.svg" alt="" width="38" height="38"><b>DUDE &amp; DADDY</b></a><nav aria-label="Main"><a href="/">Home</a><a href="https://cleanuponaislescream.com/" data-x>The game</a><a href="https://cleanuponaislescream.com/how-to-play/" data-x>How to play</a><a href="https://cleanuponaislescream.com/updates/" data-x>What&rsquo;s new</a><a href="/press/" aria-current="page">Press kit</a><button class="shift" id="shift" type="button" aria-pressed="false">Night shift</button></nav></div></header>
+<header class="sitehead"><div class="in"><a class="brand" href="/" aria-label="DUDE and DADDY home"><img src="/favicon.svg" alt="" width="38" height="38"><b>DUDE &amp; DADDY</b></a><nav aria-label="Main"><a href="/">Home</a><a href="https://cleanuponaislescream.com/" data-x>The game</a><a href="https://cleanuponaislescream.com/how-to-play/" data-x>How to play</a><a href="https://cleanuponaislescream.com/staff/" data-x>Meet the staff</a><a href="/story/">Our story</a><a href="https://cleanuponaislescream.com/updates/" data-x>What&rsquo;s new</a><a href="/press/" aria-current="page">Press kit</a><button class="shift" id="shift" type="button" aria-pressed="false">Night shift</button></nav></div></header>
+<div class="pabar" id="pabar"><div class="in"><b>Attention, shoppers</b><span id="pamsg" aria-live="off">Cleanup on aisle 3. Cleanup on aisle 4. Honestly, just clean up everywhere.</span><button id="papause" type="button" aria-label="Pause announcements">Pause</button></div></div>
 <style>.shots{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:12px}.shots img{width:100%;height:auto;border:3px solid var(--ink);border-radius:12px;box-shadow:4px 4px 0 var(--shadow)}dl{display:grid;grid-template-columns:max-content 1fr;gap:6px 18px}dt{font:500 .78rem var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--redtext);padding-top:4px}dd{margin:0}.logos{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:12px}.logos div{border:3px solid var(--ink);border-radius:12px;padding:12px;background:#fff;display:flex;align-items:center;justify-content:center;min-height:110px}.logos div.dk{background:#1B0F36}.logos img{max-width:100%;max-height:90px}</style>
 <div class="wrap" id="main">
   
@@ -140,8 +162,9 @@ ul{padding-left:1.2rem}
 <div class="floor" aria-hidden="true"></div>
 <footer class="sitefoot"><div class="in">
   <div><p class="big">DUDE &amp; DADDY LLC</p><p>A father-and-son game studio.<br>Baton Rouge, Louisiana &middot; Est. 2026</p><p>Made by a father and a son. Mop included.</p></div>
-  <div><h3>The studio</h3><ul><li><a href="/">Home</a></li><li><a href="/press/">Press kit</a></li><li><a href="/privacy/">Privacy</a></li><li><a href="mailto:hello@dudeanddaddy.com">Contact</a></li></ul></div>
+  <div><h3>The studio</h3><ul><li><a href="/">Home</a></li><li><a href="/story/">Our story</a></li><li><a href="/diary/">Dev diary</a></li><li><a href="/merch/">Merch ideas</a></li><li><a href="/creators/">For creators</a></li><li><a href="/classroom/">Classroom</a></li><li><a href="/press/">Press kit</a></li><li><a href="/privacy/">Privacy</a></li><li><a href="mailto:hello@dudeanddaddy.com">Contact</a></li></ul></div>
   <div><h3>Clean Up On Aisle Scream!</h3><ul><li><a href="https://cleanuponaislescream.com/" data-x>Play the game</a></li><li><a href="https://dudeanddaddy.itch.io/clean-up-on-aisle-scream" rel="noopener">Play on itch.io</a></li><li><a href="https://cleanuponaislescream.com/how-to-play/" data-x>How to play</a></li><li><a href="https://cleanuponaislescream.com/updates/" data-x>What&rsquo;s new</a></li><li><a href="https://cleanuponaislescream.com/privacy/" data-x>Game privacy</a></li></ul></div>
+  <div><h3>Fresh Mart</h3><ul><li><a href="https://cleanuponaislescream.com/staff/" data-x>Meet the staff</a></li><li><a href="https://cleanuponaislescream.com/extras/" data-x>Coupons &amp; extras</a></li><li><a href="https://cleanuponaislescream.com/print/" data-x>Print corner</a></li><li><a href="https://cleanuponaislescream.com/parents/" data-x>For parents</a></li><li><a href="https://cleanuponaislescream.com/status/" data-x>Store status</a></li></ul></div>
 </div></footer>
 <script>(function(){
   var root=document.documentElement, K='dd-shift', btn=document.getElementById('shift');
@@ -158,6 +181,85 @@ ul{padding-left:1.2rem}
     var a=e.target.closest&&e.target.closest('a[data-x]'); if(!a)return;
     var t=root.getAttribute('data-theme'); if(!t)return;
     try{var u=new URL(a.href);u.searchParams.set('shift',t);a.href=u.href;}catch(x){}
+  });
+})();
+/* 📢 the PA bar, 🎃 seasons and 🥚 secrets (both sites share this file) */
+(function(){
+  var root=document.documentElement, bar=document.getElementById('pabar');
+  function easter(y){var a=y%19,b=Math.floor(y/100),c=y%100,d=Math.floor(b/4),e=b%4,f=Math.floor((b+8)/25),g=Math.floor((b-f+1)/3),h=(19*a+b-d-g+15)%30,i=Math.floor(c/4),k=c%4,l=(32+2*e+2*i-h-k)%7,m=Math.floor((a+11*h+22*l)/451),n=h+l-7*m+114;return new Date(y,Math.floor(n/31)-1,n%31+1);}
+  function seasonOf(d){
+    var m=d.getMonth(),day=d.getDate(),e=easter(d.getFullYear()),days=(e-new Date(d.getFullYear(),m,day))/864e5;
+    if(days>=0&&days<=14)return 'easter';
+    if(m===9)return 'halloween'; if(m===10)return 'thanksgiving';
+    if(m===11&&day<=26)return 'christmas'; if((m===11&&day>26)||(m===0&&day<=3))return 'newyear';
+    if(m===1&&day<=14)return 'valentines'; return '';
+  }
+  var ICON={halloween:'🎃',thanksgiving:'🦃',christmas:'🎄',newyear:'🎆',valentines:'💘',easter:'🐰'};
+  var forced=/[?&]season=([a-z]*)/.exec(location.search), s=forced?forced[1]:seasonOf(new Date());
+  if(!ICON[s])s='';
+  if(s){root.setAttribute('data-season',s);var b=document.querySelector('.sitehead .brand b');if(b)b.insertAdjacentText('beforeend',' '+ICON[s]);}
+  var SEASON_MSG={
+    halloween:['Happy Halloween, shoppers. Mr. Gristle says the candy is NOT for employees.','Cleanup on aisle 13. Please do not make eye contact with the pumpkins.'],
+    thanksgiving:['Attention shoppers: Tom the turkey would like you to know he is just browsing.','The pie aisle is open. Please walk, do not gobble.'],
+    christmas:['Cleanup on aisle 12: someone wrapped a gift inside another gift. Again.','Naughty elves have been spotted near the toy aisle. Please report them.'],
+    newyear:['Attention shoppers: the store clock is running a little fast. Happy New Year.','Countdown Carl has begun counting. Nobody knows from what.'],
+    valentines:['Cleanup on aisle 14: a singing card will not stop. Please send help.','Retired Cupid reminds you his back hurts. Please be gentle.'],
+    easter:['The egg hunt is on. Please do not eat the rotten ones.','Peep the chick has wandered off again. If found, please return to aisle 5.']
+  };
+  var MSG=[
+    'Cleanup on aisle 3. Cleanup on aisle 4. Honestly, just clean up everywhere.',
+    'Attention, shoppers: the Wet Floor sign IS the wet floor. Please do not lick it.',
+    'Mr. Whiskers has been promoted to manager. Please address him as sir.',
+    'Rusty the cart is not available for rides. Rusty would like that noted.',
+    'A reminder from the PA: I can hear you. I can always hear you.',
+    'Karen Krumb is looking for the manager. She is the manager. She is looking in the mirror.',
+    'Big Deb says drop and give her twenty mops. She means it.',
+    'Free samples are in aisle 7. Please do not ask what the samples are.',
+    'Maurice the Mop Ghost wants you to remember to wring the mop. Out loud, if possible.',
+    'Attention, night clerks: the coffee is for night clerks. The ghost is not a night clerk.',
+    'This is your friendly store intercom. Please enjoy your visit. Or don’t. I am a speaker, not a cop.',
+    'Dude and Daddy would like to thank you for shopping at Fresh Mart. Mop included.'
+  ];
+  if(!bar)return;
+  var msg=document.getElementById('pamsg'),pause=document.getElementById('papause');
+  var list=(SEASON_MSG[s]||[]).concat(MSG),i=Math.floor(Math.random()*list.length),timer=null,paused=false;
+  var still=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function show(){msg.textContent=list[i%list.length];}
+  function tick(){i++;show();}
+  function start(){if(!timer&&!paused&&!still)timer=setInterval(tick,7000);}
+  function stop(){clearInterval(timer);timer=null;}
+  show();start();
+  if(pause){pause.addEventListener('click',function(){paused=!paused;pause.textContent=paused?'▶':'⏸';pause.setAttribute('aria-label',paused?'Resume announcements':'Pause announcements');if(paused)stop();else{tick();start();}});}
+  bar.addEventListener('mouseenter',stop);bar.addEventListener('mouseleave',start);
+  bar.addEventListener('focusin',stop);bar.addEventListener('focusout',start);
+})();
+(function(){
+  var K='dd-secrets',buf='',kbuf=[],KONAMI='ArrowUp,ArrowUp,ArrowDown,ArrowDown,ArrowLeft,ArrowRight,ArrowLeft,ArrowRight,b,a';
+  var still=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var SECRETS={
+    SQUEAKY:{icon:'🛒',say:'Rusty rolls by. *squeak squeak*',fx:'cart'},
+    MAURICE:{icon:'👻',say:'Maurice floats past with a mop. Pro tip: he is not hiring.',fx:'ghost'},
+    WETFLOOR:{icon:'⚠️',say:'CAUTION: wet floor. You were warned.',fx:'sign'},
+    MOPTIME:{icon:'🧹',say:'Big Deb approves. Twenty mops, as ordered.',fx:'mops'},
+    KONAMI:{icon:'🏆',say:'Employee of the Month: you. The plaque is imaginary.',fx:'plaque'}
+  };
+  function load(){try{return JSON.parse(localStorage.getItem(K)||'[]')}catch(e){return[]}}
+  function save(a){try{localStorage.setItem(K,JSON.stringify(a))}catch(e){}}
+  function toast(t){var d=document.createElement('div');d.className='ddtoast';d.setAttribute('role','status');d.textContent=t;document.body.appendChild(d);setTimeout(function(){d.remove()},5200);}
+  function fly(sym,cls){if(still)return;var d=document.createElement('div');d.className='ddfly '+cls;d.textContent=sym;d.setAttribute('aria-hidden','true');document.body.appendChild(d);setTimeout(function(){d.remove()},5200);}
+  function found(w){
+    var s=SECRETS[w],all=load(),first=all.indexOf(w)<0;if(first){all.push(w);save(all);}
+    toast('🥚 Secret '+(first?'found':'again')+': '+w+'. '+s.say+' ('+all.length+' of 5)');
+    if(s.fx==='cart')fly('🛒','fly-x');else if(s.fx==='ghost')fly('👻','fly-y');else if(s.fx==='sign')fly('⚠️','drop');else if(s.fx==='mops')fly('🧹🧹🧹','fly-x');else fly('🏆','drop');
+  }
+  window.DDSecrets={count:function(){return load().length},total:5};
+  document.addEventListener('keydown',function(e){
+    var t=e.target;if(t&&(t.tagName==='INPUT'||t.tagName==='TEXTAREA'||t.isContentEditable))return;
+    if(e.ctrlKey||e.metaKey||e.altKey)return;
+    var k=e.key;
+    kbuf.push(k.length===1?k.toLowerCase():k);if(kbuf.length>10)kbuf.shift();
+    if(kbuf.join(',')===KONAMI){kbuf=[];found('KONAMI');return;}
+    if(k.length===1&&/[a-z]/i.test(k)){buf=(buf+k.toUpperCase()).slice(-10);for(var w in SECRETS){if(w!=='KONAMI'&&buf.slice(-w.length)===w){buf='';found(w);break;}}}
   });
 })();
 </script>
