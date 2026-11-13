@@ -1,7 +1,7 @@
 // The studio news list (worker/index.mjs): run with `node --test tests/`.
 import test from 'node:test';
 import assert from 'node:assert';
-import { api, makeToken, readToken, normalizeEmail, LIMITS } from '../worker/index.mjs';
+import { api, makeToken, readToken, normalizeEmail, syncContact, LIMITS } from '../worker/index.mjs';
 
 const NOW = Date.parse('2026-11-13T12:00:00Z');
 function world() {
@@ -13,11 +13,15 @@ function world() {
     RESEND_API_KEY: 're_test',
     EMAIL_FROM: 'Dude & Daddy <dudeanddaddy@beepboopmail.com>',
   };
-  const fetchImpl = async (url, init) => (sent.push({ url, auth: init.headers.authorization, ...JSON.parse(init.body) }), { ok: true });
+  const calls = [];
+  const fetchImpl = async (url, init) => {
+    if (url !== 'https://api.resend.com/emails') return calls.push([init.method, url.replace('https://api.resend.com', ''), init.body ? JSON.parse(init.body) : null]), { ok: true };
+    return sent.push({ url, auth: init.headers.authorization, ...JSON.parse(init.body) }), { ok: true };
+  };
   const post = (path, body, { origin = 'https://dudeanddaddy.com', now = NOW, ip = '1.2.3.4' } = {}) =>
     api(new Request('https://dudeanddaddy.com' + path, { method: 'POST', headers: { ...(origin ? { Origin: origin } : {}), 'CF-Connecting-IP': ip, 'content-type': 'application/json' }, body: body === undefined ? undefined : JSON.stringify(body) }), env, { now, fetchImpl });
   const tokenIn = (mail) => /#(\S+)/.exec(mail.text)[1];
-  return { m, sent, env, post, tokenIn };
+  return { m, sent, calls, env, post, tokenIn };
 }
 
 test('an email address: one plain address only', () => {
@@ -114,4 +118,40 @@ test('the mail service says no: the visitor hears "closed", not a false yes', as
   const w = world();
   const r = await api(new Request('https://dudeanddaddy.com/api/subscribe', { method: 'POST', headers: { Origin: 'https://dudeanddaddy.com' }, body: JSON.stringify({ email: 'dad@example.com', adult: true }) }), w.env, { now: NOW, fetchImpl: async () => ({ ok: false }) });
   assert.strictEqual(r.status, 503);
+});
+
+test('the owner’s copy in Resend: a confirmed address joins the segment, an unsubscribe removes the contact; never without a segment id', async () => {
+  const SEG = '8d56340a-7b0b-46d6-9e26-37f53c9916dd';
+  const w = world();
+  await w.post('/api/subscribe', { email: 'dad@example.com', adult: true });
+  await w.post('/api/confirm', { token: w.tokenIn(w.sent[0]) });
+  assert.deepStrictEqual(w.calls, [], 'no segment set (a preview, a test): Resend’s contacts are never touched');
+  const w2 = world();
+  w2.env.NEWS_SEGMENT_ID = SEG;
+  await w2.post('/api/subscribe', { email: 'dad@example.com', adult: true });
+  await w2.post('/api/confirm', { token: w2.tokenIn(w2.sent[0]) });
+  assert.deepStrictEqual(w2.calls, [['POST', '/contacts', { email: 'dad@example.com', unsubscribed: false, segments: [{ id: SEG }] }]]);
+  await w2.post('/api/unsubscribe', { token: w2.tokenIn(w2.sent[1]) });
+  assert.deepStrictEqual(w2.calls[1], ['DELETE', '/contacts/dad%40example.com', null]);
+  assert.ok(!w2.m.has('sub:dad@example.com'));
+});
+
+test('the owner’s copy: someone who is a contact already is switched back on and put in the segment; Resend being down never fails the click', async () => {
+  const SEG = '8d56340a-7b0b-46d6-9e26-37f53c9916dd';
+  const env = { RESEND_API_KEY: 're_test', NEWS_SEGMENT_ID: SEG };
+  const calls = [];
+  const dup = async (url, init) => (calls.push([init.method, url.replace('https://api.resend.com', '')]), { ok: !(init.method === 'POST' && url.endsWith('/contacts')) });
+  assert.strictEqual(await syncContact(env, 'dad@example.com', true, dup), true);
+  assert.deepStrictEqual(calls, [['POST', '/contacts'], ['PATCH', '/contacts/dad%40example.com'], ['POST', `/contacts/dad%40example.com/segments/${SEG}`]]);
+  assert.strictEqual(await syncContact({ ...env, NEWS_SEGMENT_ID: 'nope' }, 'dad@example.com', true, dup), false);
+  assert.strictEqual(await syncContact(env, 'not an email', true, dup), false);
+  // a sending-only key (403) or an outage: the sign-up itself still succeeds
+  const w = world();
+  w.env.NEWS_SEGMENT_ID = SEG;
+  const down = async (url, init) => (url === 'https://api.resend.com/emails' ? (w.sent.push(JSON.parse(init.body)), { ok: true }) : { ok: false, status: 403 });
+  const post = (path, body) => api(new Request('https://dudeanddaddy.com' + path, { method: 'POST', headers: { Origin: 'https://dudeanddaddy.com' }, body: JSON.stringify(body) }), w.env, { now: NOW, fetchImpl: down });
+  await post('/api/subscribe', { email: 'dad@example.com', adult: true });
+  const r = await post('/api/confirm', { token: w.tokenIn(w.sent[0]) });
+  assert.deepStrictEqual([r.status, await r.json()], [200, { ok: true }]);
+  assert.ok(w.m.has('sub:dad@example.com'));
 });

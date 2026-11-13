@@ -15,6 +15,8 @@
   // sign-ups from one address: 5 a minute
   "ratelimits": [{ "name": "SIGNUPS", "namespace_id": "2001", "simple": { "limit": 5, "period": 60 } }],
   // (RESEND_API_KEY, EMAIL_FROM and SIGNUP_SECRET are secrets set in the dashboard, never in this repo)
+  // the Resend segment confirmed subscribers are copied to (previews leave it out: they never touch the real list)
+  "vars": { "NEWS_SEGMENT_ID": "8d56340a-7b0b-46d6-9e26-37f53c9916dd" },
   "observability": { "enabled": true },
   // pull-request previews (Cloudflare builds one per branch): their own empty list, never the real subscribers.
   // A preview has no mail secrets, so its form answers "the mail room is closed".
