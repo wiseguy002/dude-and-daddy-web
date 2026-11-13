@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /api/
+Disallow: /news/
 
 Sitemap: https://dudeanddaddy.com/sitemap.xml

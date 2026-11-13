@@ -307,6 +307,26 @@ html[data-season=easter] .pabar{background:#C9B6FF}
       </ol>
     </div>
   </section>
+
+  <div class="floor" aria-hidden="true"></div>
+
+  <section class="band" id="news">
+    <div class="wrap">
+      <div class="aisle"><span class="no">Aisle 4</span><h2>Store News</h2></div>
+      <p>Grown-ups: want to hear when we ship a new game or a big update? Leave an email and we will write only when there is real news. No ads, and we never share the list.</p>
+      <form id="newsform" novalidate style="margin-top:14px">
+        <p style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:0 0 10px">
+          <label for="newsemail" class="mono">Email</label>
+          <input id="newsemail" name="email" type="email" autocomplete="email" required maxlength="254" placeholder="you@example.com" style="flex:1 1 16rem;min-width:0;font:inherit;padding:.75rem 1rem;border:3px solid var(--ink);border-radius:999px;background:var(--panel);color:var(--ink)">
+          <button class="btn primary" type="submit">Sign me up</button>
+        </p>
+        <p style="margin:0 0 6px"><label><input name="adult" type="checkbox" required> I am 18 or older. (Kids: ask a grown-up to sign up instead.)</label></p>
+        <p style="position:absolute;left:-9999px" aria-hidden="true"><label>Leave this empty <input name="website" type="text" tabindex="-1" autocomplete="off"></label></p>
+        <p id="newssay" role="status" aria-live="polite" style="min-height:1.5em;font-weight:800"></p>
+        <p style="font-size:.9rem;color:var(--muted)">We send one email to confirm. You can leave any time with the link in every email. Details on the <a href="/privacy/" style="text-decoration:underline">privacy page</a>.</p>
+      </form>
+    </div>
+  </section>
 </main>
 
 <div class="floor" aria-hidden="true"></div>
@@ -417,5 +437,6 @@ html[data-season=easter] .pabar{background:#C9B6FF}
 
 
 
+<script src="/news/signup.js" defer></script>
 </body>
 </html>
