@@ -5,6 +5,9 @@
 // A confirm link is good for 48 hours; an unsubscribe link never runs out. Both are signed with SIGNUP_SECRET, so
 // nothing has to be stored about someone who never confirms. Subscribers live in the SIGNUP KV namespace as
 // `sub:<email>`. Mail goes through Resend from beepboopmail.com (secrets RESEND_API_KEY, EMAIL_FROM).
+// When NEWS_SEGMENT_ID is set, a confirmed address is also added to that Resend segment (and removed again on
+// unsubscribe), so news can be written and sent from Resend's Broadcasts screen. That needs RESEND_API_KEY to be a
+// full-access key; with a sending-only key the list still works and only this copy is skipped.
 const SITE = 'https://dudeanddaddy.com';
 export const LIMITS = { CONFIRM_MS: 48 * 3600 * 1000, PER_ADDRESS_DAY: 3, ALL_PER_DAY: 300, BODY: 2048 };
 const EMAIL_RE = /^[a-z0-9.!#$%&*+/=?^_{|}~-]{1,64}@[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)+$/;
@@ -71,6 +74,33 @@ export async function sendMail(env, { to, subject, text, headers }, fetchImpl = 
     return false;
   }
 }
+// The owner's copy of the list in Resend (best effort: the KV list is the one that counts, so a failure here never
+// fails the visitor's click). → true when Resend has it right.
+const SEGMENT_RE = /^[0-9a-f-]{36}$/;
+async function resend(env, method, path, body, fetchImpl) {
+  try {
+    const res = await fetchImpl('https://api.resend.com' + path, {
+      method,
+      headers: { authorization: 'Bearer ' + env.RESEND_API_KEY, 'content-type': 'application/json' },
+      ...(body ? { body: JSON.stringify(body) } : {}),
+    });
+    return !!res && res.ok;
+  } catch (e) {
+    return false;
+  }
+}
+export async function syncContact(env, email, on, fetchImpl = (...a) => fetch(...a)) {
+  const seg = env.NEWS_SEGMENT_ID;
+  if (typeof seg !== 'string' || !SEGMENT_RE.test(seg) || !env.RESEND_API_KEY || !normalizeEmail(email)) return false;
+  const who = encodeURIComponent(email);
+  if (!on) return resend(env, 'DELETE', `/contacts/${who}`, null, fetchImpl);
+  if (await resend(env, 'POST', '/contacts', { email, unsubscribed: false, segments: [{ id: seg }] }, fetchImpl)) return true;
+  // (already a contact, perhaps one who left before: back on, and in the segment)
+  const back = await resend(env, 'PATCH', `/contacts/${who}`, { unsubscribed: false }, fetchImpl);
+  const inSeg = await resend(env, 'POST', `/contacts/${who}/segments/${seg}`, null, fetchImpl);
+  return back && inSeg;
+}
+
 const FOOT = ['', 'DUDE & DADDY LLC · a father-and-son game studio · Baton Rouge, Louisiana', `${SITE}/privacy/`];
 export const confirmEmail = (link) => ({
   subject: 'One click to join the DUDE & DADDY news list',
@@ -103,7 +133,7 @@ const fromHere = (request, url) => {
   }
 };
 
-export async function api(request, env, { now = Date.now(), fetchImpl } = {}) {
+export async function api(request, env, { now = Date.now(), fetchImpl = (...a) => fetch(...a) } = {}) {
   const url = new URL(request.url);
   const path = url.pathname.replace(/\/$/, '');
   if (request.method !== 'POST' || !['/api/subscribe', '/api/confirm', '/api/unsubscribe'].includes(path)) return json({ ok: false, error: 'not found' }, 404);
@@ -116,6 +146,7 @@ export async function api(request, env, { now = Date.now(), fetchImpl } = {}) {
     const email = await readToken(env.SIGNUP_SECRET, 'u', url.searchParams.get('t') || (o && o.token), now);
     if (!email) return json({ ok: false, error: 'bad link' }, 400);
     await env.SIGNUP.delete('sub:' + email);
+    await syncContact(env, email, false, fetchImpl);
     return json({ ok: true });
   }
   if (!fromHere(request, url)) return json({ ok: false, error: 'not from here' }, 403);
@@ -128,6 +159,7 @@ export async function api(request, env, { now = Date.now(), fetchImpl } = {}) {
     const had = await env.SIGNUP.get('sub:' + email);
     if (!had) {
       await env.SIGNUP.put('sub:' + email, JSON.stringify({ at: new Date(now).toISOString() }));
+      await syncContact(env, email, true, fetchImpl);
       const unsub = await makeToken(env.SIGNUP_SECRET, 'u', email);
       await sendMail(env, { to: email, ...welcomeEmail(`${site}/news/unsubscribe/#${unsub}`), headers: { 'List-Unsubscribe': `<${site}/api/unsubscribe?t=${unsub}>`, 'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click' } }, fetchImpl);
     }
