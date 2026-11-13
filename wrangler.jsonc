@@ -1,9 +1,19 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "studio",
+  "main": "worker/index.mjs",
   "compatibility_date": "2025-09-01",
   "assets": {
     "directory": "./site",
-    "not_found_handling": "404-page"
-  }
+    "binding": "ASSETS",
+    "not_found_handling": "404-page",
+    // (only the news list's three addresses run code: every page is still a plain file)
+    "run_worker_first": ["/api/*"]
+  },
+  // the news list: confirmed subscribers (`sub:<email>`) and the day's counts
+  "kv_namespaces": [{ "binding": "SIGNUP", "id": "5bd1a7897b8144f495a415879c82e61a" }],
+  // sign-ups from one address: 5 a minute
+  "ratelimits": [{ "name": "SIGNUPS", "namespace_id": "2001", "simple": { "limit": 5, "period": 60 } }],
+  // (RESEND_API_KEY, EMAIL_FROM and SIGNUP_SECRET are secrets set in the dashboard, never in this repo)
+  "observability": { "enabled": true }
 }
