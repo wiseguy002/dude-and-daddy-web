@@ -13,8 +13,10 @@ Rob (Daddy) and his son (Dude) run DUDE & DADDY LLC. Their game, Clean Up On Ais
 - Done: status page + back office live, Rob signed in fine. News sign-up fixed (its Resend key had been deleted; new
   sending-only key `dude-and-daddy-studio`). Branch `claude/changes` holds the status work; not merged to `main` yet.
 - Waiting on Rob: alert emails for the status page (`RESEND_API_KEY`, `ALERT_TO` on `dude-and-daddy-status`).
-- "Setup to fix" (shown in the back office, each is one Cloudflare switch; ask Rob before changing account settings):
-  Always Use HTTPS on both zones; www.cleanuponaislescream.com doesn't exist; no DMARC on dudeanddaddy.com.
+- Fixed 2026-11-14 (via the Cloudflare API, Rob's OK): Always Use HTTPS on both zones; www.cleanuponaislescream.com =
+  proxied AAAA 100:: + a Single Redirect rule (301 to the main address, path and query kept); `_dmarc.dudeanddaddy.com`
+  = `v=DMARC1; p=none;` (monitor only — tighten to quarantine once it's clear nothing sends as dudeanddaddy.com,
+  e.g. Gmail "send as hello@"). The back office's "Setup to fix" rows now act as watchdogs for these.
 - Sending-only key means new subscribers are NOT copied to the Resend "Dude & Daddy news" segment; copy them across
   before a Broadcast.
 - Ideas: point the game site's own /status/ page at status.dudeanddaddy.com (game repo).
