@@ -31,3 +31,16 @@ A third Cloudflare worker, separate from the studio site (`studio`, one folder u
 
 `ADMIN_EMAILS`, `RESEND_API_KEY` (a sending key for beepboopmail.com) and `ALERT_TO`. `ACCESS_AUD` goes in `vars`
 once the Access application exists.
+
+## Live setup (done 2026-11-14)
+
+- Deployed with `cd status && npx wrangler deploy` (outside the sandbox). Name must be `dude-and-daddy-status`.
+- Sign-in: Zero Trust team `bitter-mode-ad80`, Access application "DUDE & DADDY back office" on
+  `status.dudeanddaddy.com/console` and `/api/console`, policy "DUDE & DADDY back office - Rob only" (copied from the
+  Defib one), email one-time code, 24 h sessions. A Defib/family-site sign-in the same day carries over, so no login
+  page may appear. To let someone else in: add them to that policy AND to `ADMIN_EMAILS`.
+- Secrets set: `ADMIN_EMAILS`. Not yet: `RESEND_API_KEY` + `ALERT_TO` (alert emails; without them alerts are only logged).
+- Locally: `.claude/launch.json` has `dd-status` (8793, console open on localhost) and `dd-status-locked` (8794, shows the
+  lock). If 127.0.0.1:8793 shows a Defib "You are offline" page, an old Defib service worker is cached there: use
+  `localhost` or unregister it. Right after a deploy your Mac may not find the new address for ~30 min (it remembered
+  "doesn't exist"); `curl --resolve status.dudeanddaddy.com:443:<Cloudflare IP>` gets round it.
