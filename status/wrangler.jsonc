@@ -1,0 +1,31 @@
+{
+  // DUDE & DADDY status (status.dudeanddaddy.com): the public status page, Rob's back office at /console, and the
+  // checker that looks at every studio and game asset every five minutes (the list: src/assets.js). A third worker,
+  // separate from the studio site ("studio", one folder up) and the game ("clean-up-on-aisle-scream", its own repo).
+  // Deploy only from inside this folder, and check the name shown is "dude-and-daddy-status".
+  "$schema": "../node_modules/wrangler/config-schema.json",
+  "name": "dude-and-daddy-status",
+  "main": "src/worker.js",
+  "compatibility_date": "2025-09-01",
+  "routes": [{ "pattern": "status.dudeanddaddy.com", "custom_domain": true }],
+  // Off on purpose: a workers.dev address would skip the Cloudflare Access sign-in in front of /console.
+  // (The worker checks the Access ticket itself too, so the console stays shut either way.)
+  "workers_dev": false,
+  "preview_urls": false,
+  "assets": { "directory": "./public", "binding": "ASSETS", "run_worker_first": true, "html_handling": "auto-trailing-slash" },
+  "durable_objects": { "bindings": [{ "name": "BOARD", "class_name": "StatusBoard" }] },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["StatusBoard"] }],
+  "triggers": { "crons": ["*/5 * * * *"] },
+  // The studio's news list (KV studio-signup), read for the console's subscriber count. This worker only reads it.
+  "kv_namespaces": [{ "binding": "SIGNUP", "id": "5bd1a7897b8144f495a415879c82e61a" }],
+  // The game's health answer, asked of the game worker directly rather than over the internet.
+  "services": [{ "binding": "GAME", "service": "clean-up-on-aisle-scream" }],
+  "observability": { "enabled": true },
+  // Not secret (both appear in every sign-in ticket): the Cloudflare Access team (the same one as the family site)
+  // and the "DUDE & DADDY back office" Access application's AUD tag (filled in when that application is made).
+  // Secrets, each set by Rob with `npx wrangler secret put NAME` from this folder:
+  //   ADMIN_EMAILS    who may open the console, comma-separated
+  //   RESEND_API_KEY  for alert emails (a sending key for beepboopmail.com; optional, without it alerts are only logged)
+  //   ALERT_TO        where alert emails go (optional)
+  "vars": { "ACCESS_TEAM": "bitter-mode-ad80", "ACCESS_AUD": "" }
+}

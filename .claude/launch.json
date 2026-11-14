@@ -1,0 +1,7 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    { "name": "dd-status", "runtimeExecutable": "npx", "runtimeArgs": ["--prefix", "status", "wrangler", "dev", "--config", "status/wrangler.jsonc", "--local-upstream", "localhost", "--upstream-protocol", "http", "--port", "8793", "--inspector-port", "9244", "--persist-to", ".wrangler/status", "--test-scheduled", "--var", "DEV_OPEN_CONSOLE:local-only"], "port": 8793 },
+    { "name": "dd-status-locked", "runtimeExecutable": "npx", "runtimeArgs": ["--prefix", "status", "wrangler", "dev", "--config", "status/wrangler.jsonc", "--local-upstream", "localhost", "--upstream-protocol", "http", "--port", "8794", "--inspector-port", "9245", "--persist-to", ".wrangler/status-locked"], "port": 8794 }
+  ]
+}

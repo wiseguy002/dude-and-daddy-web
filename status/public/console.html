@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>DUDE &amp; DADDY Back Office</title>
+<meta name="theme-color" content="#1B0F36">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/css/status.css">
+<script type="module" src="/js/console.js"></script>
+</head>
+<body>
+<div class="wrap wide">
+  <header class="top">
+    <a class="brand" href="/console"><img src="/favicon.svg" alt=""><div><b>DUDE &amp; DADDY</b><span>Back office · D&amp;D + Aisle Scream</span></div></a>
+    <nav><span class="mute small" id="you"></span><a href="/">Public status page</a></nav>
+  </header>
+  <nav class="cnav" aria-label="Console sections">
+    <a href="#overview">Overview</a><a href="#watch">Everything we watch</a><a href="#notices">Notices</a><a href="#numbers">News list &amp; game</a><a href="#changes">Change log</a><a href="#links">Manage</a>
+  </nav>
+  <main>
+    <section id="overview">
+      <section class="banner" id="banner" data-state="unknown" aria-live="polite">
+        <div><span class="pa">Attention, managers</span><h1 id="headline">Loading…</h1><div class="mute small" id="checked"></div></div>
+        <div class="bar"><button id="check" type="button">Check now</button></div>
+      </section>
+      <div class="msg" id="check-msg" role="status"></div>
+      <div class="tiles" id="tiles"></div>
+      <div id="advice"></div>
+    </section>
+
+    <section id="watch">
+      <h2>Everything we watch</h2>
+      <p class="mute small">"Private" rows are only shown here, never on the public page. "Setup to fix" rows are known settings to change once: they never email you or turn anything yellow.</p>
+      <div class="scroll"><table class="tbl" id="watch-table"><thead><tr><th>What</th><th>State</th><th>What we saw</th><th>Speed</th><th>Checked</th><th>90 days</th><th></th></tr></thead><tbody></tbody></table></div>
+    </section>
+
+    <section id="notices">
+      <h2>Notices on the public page</h2>
+      <form class="post" id="post">
+        <label>Title <input name="title" maxlength="120" required placeholder="Co-op is slow tonight, we're on it"></label>
+        <label>Details (optional) <textarea name="message" maxlength="2000" placeholder="What players will notice, and when you expect it fixed."></textarea></label>
+        <label>How serious
+          <select name="level">
+            <option value="degraded">Slower than usual</option>
+            <option value="down">Not working</option>
+            <option value="maintenance">Planned work</option>
+            <option value="info">Just a notice</option>
+          </select>
+        </label>
+        <div class="bar"><button type="submit">Post on the status page</button><span class="msg" id="post-msg" role="status"></span></div>
+      </form>
+      <div id="notice-list"></div>
+    </section>
+
+    <section id="numbers">
+      <h2>News list &amp; game</h2>
+      <div class="msg" id="num-msg" role="status"></div>
+      <div class="tiles" id="num-tiles"></div>
+      <p class="mute small">The news list is read straight from the studio site's storage and never changed from here. To send news, use Resend Broadcasts (link below). Players, boards and co-op switches live in the game's own owner tools on the family site.</p>
+    </section>
+
+    <section id="changes">
+      <h2>Change log</h2>
+      <p class="mute small">Every time something changed state, newest first (last 90 days).</p>
+      <div class="scroll"><table class="tbl" id="change-table"><thead><tr><th>When</th><th>What</th><th>Became</th><th>What we saw</th></tr></thead><tbody></tbody></table></div>
+    </section>
+
+    <section id="links">
+      <h2>Manage</h2>
+      <div class="links" id="link-list"></div>
+    </section>
+  </main>
+  <footer class="foot">DUDE &amp; DADDY back office. Checks run every five minutes; alerts email you after two failures in a row.</footer>
+</div>
+</body>
+</html>
