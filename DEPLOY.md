@@ -31,7 +31,8 @@ Storage & Databases, KV, `studio-signup`. Mail goes through Resend from `beepboo
 
 Three secrets on the `studio` Worker (Settings, Variables and Secrets), never in this repo:
 
-    RESEND_API_KEY   the Resend key named dude-and-daddy-2 (sending only, beepboopmail.com only)
+    RESEND_API_KEY   the Resend key named dude-and-daddy-studio (sending access, beepboopmail.com only;
+                     made 2026-11-14 after the old dude-and-daddy-2 key was deleted and the form said "closed")
     EMAIL_FROM       Dude & Daddy <dudeanddaddy@beepboopmail.com>
     SIGNUP_SECRET    a long random value that signs the confirm and unsubscribe links
                      (changing it breaks every unsubscribe link already sent: do not rotate it casually)

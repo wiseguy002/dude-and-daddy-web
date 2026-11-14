@@ -1,0 +1,14 @@
+{
+  "name": "dude-and-daddy-status",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/",
+    "test:worker": "node --test integration/"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2",
+    "miniflare": "^4.20260426.0",
+    "wrangler": "^4.86.0"
+  }
+}
