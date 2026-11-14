@@ -1,0 +1,17 @@
+.lede{font-size:1.2rem;color:var(--muted)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));gap:14px;margin:14px 0}
+.card{background:var(--panel);border:3px solid var(--ink);border-radius:16px;padding:14px 16px;box-shadow:5px 5px 0 var(--shadow)}
+.card h3{font:400 1.05rem/1.15 var(--disp);margin:0 0 6px}.card p{margin:0;font-size:.95rem}
+.tip{background:var(--soft);border:3px solid var(--ink);border-radius:14px;padding:6px 16px;margin:16px 0}
+.note{border-left:6px solid var(--yellow);padding:2px 14px;margin:16px 0;background:var(--soft)}
+.post{background:var(--panel);border:3px solid var(--ink);border-radius:16px;padding:6px 18px 14px;margin:16px 0;box-shadow:5px 5px 0 var(--shadow)}
+.post h2{margin-top:12px}
+.sign{display:block;max-width:260px;margin:30px auto 0;background:var(--yellow);color:#1B0F36;border:4px solid #1B0F36;border-radius:14px 14px 4px 4px;padding:14px 10px;text-align:center;font:400 1.5rem/1.1 var(--disp);transform:rotate(-3deg);box-shadow:6px 6px 0 var(--shadow)}
+.mock{display:grid;grid-template-columns:repeat(auto-fit,minmax(14rem,1fr));gap:16px;margin:16px 0}
+.mock figure{margin:0;background:var(--panel);border:3px solid var(--ink);border-radius:16px;padding:14px;box-shadow:5px 5px 0 var(--shadow);text-align:center}
+.mock figcaption{font-size:.9rem;margin-top:8px;color:var(--muted)}
+.tee{width:150px;height:130px;margin:0 auto;background:#1B0F36;border:3px solid #1B0F36;border-radius:10px 10px 18px 18px;position:relative;color:#FFD21F;font:400 .8rem/1.05 var(--disp);display:flex;align-items:center;justify-content:center;text-align:center;padding:0 30px}
+.tee::before,.tee::after{content:"";position:absolute;top:-4px;width:34px;height:40px;background:#1B0F36;border-radius:6px}.tee::before{left:-24px;transform:rotate(18deg)}.tee::after{right:-24px;transform:rotate(-18deg)}
+.stick{width:120px;height:120px;margin:0 auto;border-radius:50%;background:#FFD21F;border:4px solid #fff;outline:3px solid #1B0F36;display:flex;align-items:center;justify-content:center;font:400 .85rem/1.05 var(--disp);color:#1B0F36;text-align:center;padding:12px}
+.bdg{width:120px;height:120px;margin:0 auto;border-radius:50%;background:#FF3D55;border:6px solid #1B0F36;display:flex;align-items:center;justify-content:center;font:400 .8rem/1.05 var(--disp);color:#1B0F36;text-align:center;padding:14px}
+table{border-collapse:collapse;width:100%;margin:12px 0}th,td{border:2px solid var(--ink);padding:6px 10px;text-align:left;vertical-align:top}th{background:var(--soft)}
