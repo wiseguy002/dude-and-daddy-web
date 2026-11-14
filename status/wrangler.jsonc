@@ -22,10 +22,10 @@
   "services": [{ "binding": "GAME", "service": "clean-up-on-aisle-scream" }],
   "observability": { "enabled": true },
   // Not secret (both appear in every sign-in ticket): the Cloudflare Access team (the same one as the family site)
-  // and the "DUDE & DADDY back office" Access application's AUD tag (filled in when that application is made).
+  // and the "DUDE & DADDY back office" Access application's AUD tag (Zero Trust > Access > Applications, made 2026-11-14).
   // Secrets, each set by Rob with `npx wrangler secret put NAME` from this folder:
   //   ADMIN_EMAILS    who may open the console, comma-separated
   //   RESEND_API_KEY  for alert emails (a sending key for beepboopmail.com; optional, without it alerts are only logged)
   //   ALERT_TO        where alert emails go (optional)
-  "vars": { "ACCESS_TEAM": "bitter-mode-ad80", "ACCESS_AUD": "" }
+  "vars": { "ACCESS_TEAM": "bitter-mode-ad80", "ACCESS_AUD": "cb18d2526a679b0a6d501790cf81ce9a09749b5ced5bd835706005e0df4c0400" }
 }
