@@ -111,7 +111,16 @@ export const welcomeEmail = (unsub) => ({
   text: ["You're on the DUDE & DADDY news list.", '', 'We write only when there is real news: a new game, a big update. No ads, and we never share the list.', '', 'Changed your mind? Leave any time:', unsub, ...FOOT].join('\n'),
 });
 
-const json = (o, status = 200) => new Response(JSON.stringify(o), { status, headers: { 'content-type': 'application/json', 'cache-control': 'no-store' } });
+// (the static files get their security headers from site/_headers; these answers come from code, so they set their own)
+const SAFE = {
+  'cache-control': 'no-store',
+  'x-content-type-options': 'nosniff',
+  'strict-transport-security': 'max-age=63072000; includeSubDomains; preload',
+  'content-security-policy': "default-src 'none'; frame-ancestors 'none'",
+  'cross-origin-resource-policy': 'same-origin',
+  'referrer-policy': 'no-referrer',
+};
+const json = (o, status = 200) => new Response(JSON.stringify(o), { status, headers: { 'content-type': 'application/json', ...SAFE } });
 async function bodyOf(request) {
   try {
     const text = await request.text();
