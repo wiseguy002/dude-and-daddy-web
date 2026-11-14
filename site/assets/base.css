@@ -1,0 +1,15 @@
+@font-face{font-family:"Bowlby One";font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/bowlby-one-400.woff2) format("woff2")}
+@font-face{font-family:"Figtree";font-style:normal;font-weight:500;font-display:swap;src:url(/fonts/figtree-500.woff2) format("woff2")}
+@font-face{font-family:"Figtree";font-style:normal;font-weight:700;font-display:swap;src:url(/fonts/figtree-700.woff2) format("woff2")}
+@font-face{font-family:"Figtree";font-style:normal;font-weight:800;font-display:swap;src:url(/fonts/figtree-800.woff2) format("woff2")}
+@font-face{font-family:"DM Mono";font-style:normal;font-weight:500;font-display:swap;src:url(/fonts/dm-mono-500.woff2) format("woff2")}
+html{-webkit-text-size-adjust:100%}
+
+/* small one-off helpers (used instead of inline style="", which the security policy blocks) */
+.u-mt0{margin-top:0!important}.u-mt14{margin-top:14px!important}.u-mt22{margin-top:22px!important}.u-mb44{margin-bottom:44px!important}
+.u-m0{margin:0!important}.u-mb6{margin:0 0 6px!important}.u-center{text-align:center!important}.u-block{display:block!important}
+.u-ul{text-decoration:underline!important}.u-say{min-height:1.5em;font-weight:800}
+.u-fine{font-size:.9rem;color:var(--muted)}.u-trap{position:absolute!important;left:-9999px!important}
+.u-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:0 0 10px}
+.u-field{flex:1 1 16rem;min-width:0;font:inherit;padding:.75rem 1rem;border:3px solid var(--ink);border-radius:999px;background:var(--panel);color:var(--ink)}
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
