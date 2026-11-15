@@ -34,12 +34,11 @@ Rob (Daddy) and his son (Dude) run DUDE & DADDY LLC; their game, Clean Up On Ais
 - Fixed in Cloudflare (API, Rob's OK): Always Use HTTPS on both zones; www.cleanuponaislescream.com = proxied AAAA
   100:: + Single Redirect (301 to the main address); `_dmarc.dudeanddaddy.com` = `v=DMARC1; p=none;` (monitor only —
   tighten once it's clear nothing sends as dudeanddaddy.com, e.g. Gmail "send as hello@").
+- 2026-11-15: www.dudeanddaddy.com now 301s to the main address (dashboard Single Redirect "www to
+  dudeanddaddy.com", keeps path + query; verified live). Status check `studio-www` expects that 301.
 
 ## Waiting on Rob
 - Alert emails for the status page: `RESEND_API_KEY` + `ALERT_TO` on `dude-and-daddy-status` (until then alerts only log).
-- **www.dudeanddaddy.com serves a copy of the site** instead of redirecting. Fix: zone Redirect Rule from the
-  "Redirect from WWW to root" template (`https://www.dudeanddaddy.com/*` to `https://dudeanddaddy.com/${1}`, 301, keep
-  query). When done, change `studio-www` in `status/src/assets.js` to expect 301 to https://dudeanddaddy.com/ and redeploy status.
 - Lawyer glance at the privacy page; confirm the LLC filing (see DEPLOY.md).
 
 ## Leftovers / ideas

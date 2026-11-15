@@ -40,7 +40,7 @@ export const ASSETS = [
   { id: 'game-itch', group: 'game', public: true, name: 'itch.io page', kind: 'http', url: 'https://dudeanddaddy.itch.io/clean-up-on-aisle-scream', expect: { status: 200, contains: 'Clean Up On Aisle' }, manage: 'https://itch.io/dashboard' },
   // ---- the studio site ----
   { id: 'studio-home', group: 'studio', public: true, name: 'dudeanddaddy.com', kind: 'http', url: STUDIO + '/', expect: { status: 200, contains: 'DUDE &amp; DADDY' }, manage: CF + '/workers/services/view/studio' },
-  { id: 'studio-www', group: 'studio', public: false, name: 'www.dudeanddaddy.com', kind: 'http', method: 'HEAD', url: 'https://www.dudeanddaddy.com/', expect: { status: 200 } },
+  { id: 'studio-www', group: 'studio', public: false, name: 'www.dudeanddaddy.com sends to the main address', kind: 'http', method: 'HEAD', url: 'https://www.dudeanddaddy.com/', expect: { status: 301, location: STUDIO + '/' } },
   { id: 'studio-game-link', group: 'studio', public: false, name: 'dudeanddaddy.com/game/ sends to the game', kind: 'http', url: STUDIO + '/game/', expect: { status: 301, location: GAME + '/' } },
   { id: 'studio-story', group: 'studio', public: false, name: 'Our story and dev diary', kind: 'http', url: STUDIO + '/diary/', expect: { status: 200, contains: 'DUDE &amp; DADDY' } },
   { id: 'studio-press', group: 'studio', public: true, name: 'Press kit', kind: 'http', url: STUDIO + '/press/', expect: { status: 200, contains: 'press' } },
