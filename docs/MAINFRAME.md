@@ -38,11 +38,14 @@ Required on every page: `DADDY LLC` and `hello@dudeanddaddy.com` (both in the lo
 Workers Builds already uploads a preview version for every branch that is not `main` and reports the
 check run "Workers Builds: studio" on its commit. Mainframe opens `https://<branch slug>-studio.robewise.workers.dev`
 (for `mainframe/1a2b3c4d`: `mainframe-1a2b3c4d-studio...`). Previews use the preview KV list and have no mail
-secrets, so their sign-up form says the mail room is closed. Previews are public to anyone with the link.
+secrets, so their sign-up form says the mail room is closed. Previews need a sign-in: Cloudflare Access covers
+the `studio` Worker's preview URLs (scope "Previews only", Cloudflare account members only); dudeanddaddy.com
+itself stays public.
 
-Needs Rob (once): install the Mainframe GitHub App on `dude-and-daddy-web` (Only select repositories), and keep
-Workers Builds' builds for non-production branches and Preview URLs switched on (both are on today).
-Optional: a Cloudflare Access policy on the Worker's preview URLs to make drafts private.
+Setup (done 2026-11-16):
+- [x] Mainframe GitHub App ("Rob's Studio", becoming Mainframe) installed on `dude-and-daddy-web`.
+- [x] Cloudflare Access on the preview URLs (checked: a preview answers 302 to the Access sign-in).
+- Keep Workers Builds' builds for non-production branches and Preview URLs switched on (both on).
 
 ## Checks
 
