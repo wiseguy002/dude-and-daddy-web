@@ -1,0 +1,33 @@
+{
+  "contract": 1,
+  "name": "Dude & Daddy",
+  "id": "dude-and-daddy",
+  "repo": "wiseguy002/dude-and-daddy-web",
+  "branch": "main",
+  "liveUrl": "https://dudeanddaddy.com",
+  "previewUrl": "https://{slug}-studio.robewise.workers.dev",
+  "siteRoot": "site/",
+  "pageMeta": false,
+  "theme": {
+    "mark": "site/favicon.svg",
+    "light": { "page": "#F6F7FF", "panel": "#FFFFFF", "sidebar": "#1B0F36", "sidebarInk": "#FFD21F",
+               "ink": "#1B0F36", "muted": "#54497A", "accent": "#FFD21F", "accentInk": "#1B0F36", "danger": "#C8243D" },
+    "dark": { "page": "#1B0F36", "panel": "#2B1A52", "sidebar": "#080314", "sidebarInk": "#FFD21F",
+              "ink": "#F6F7FF", "muted": "#BFB3E0", "accent": "#FFD21F", "accentInk": "#1B0F36", "danger": "#FF7A8C" }
+  },
+  "pages": {
+    "sources": "site/**index.html",
+    "route": { "site/index.html": "/", "site/*/index.html": "/{dir}/", "site/*/*/index.html": "/{dir}/" }
+  },
+  "media": { "folder": "site/pictures", "maxBytes": 2000000,
+             "types": ["image/png", "image/jpeg", "image/svg+xml", "image/webp"] },
+  "build": { "ci": "ci.yml", "output": "site" },
+  "rules": {
+    "requiredText": ["DADDY LLC", "hello@dudeanddaddy.com"],
+    "warnWords": ["for sale", "buy", "price", "giveaway", "contest", "prize", "gore", "gory", "blood"],
+    "lockedFiles": ["site/_headers", "site/_redirects", "site/assets/chrome.js", "site/news/signup.js",
+                    "site/privacy/index.html", "site/news/confirm/index.html", "site/news/unsubscribe/index.html",
+                    "worker/index.mjs", "wrangler.jsonc", "mainframe.json", ".github/workflows/ci.yml"],
+    "maxFieldChars": { "text": 600, "rich": 20000 }
+  }
+}

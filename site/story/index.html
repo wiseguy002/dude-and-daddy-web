@@ -29,29 +29,35 @@
 <body>
 <link rel="stylesheet" href="/assets/chrome.css?v=1">
 <a class="skip" href="#main">Skip to content</a>
-<header class="sitehead"><div class="in"><a class="brand" href="/" aria-label="DUDE and DADDY home"><img src="/favicon.svg" alt="" width="38" height="38"><b>DUDE &amp; DADDY</b></a><nav aria-label="Main"><a href="/">Home</a><a href="https://cleanuponaislescream.com/" data-x>The game</a><a href="https://cleanuponaislescream.com/how-to-play/" data-x>How to play</a><a href="https://cleanuponaislescream.com/staff/" data-x>Meet the staff</a><a href="/story/" aria-current="page">Our story</a><a href="https://cleanuponaislescream.com/updates/" data-x>What&rsquo;s new</a><a href="/press/">Press kit</a><button class="shift" id="shift" type="button" aria-pressed="false">Night shift</button></nav></div></header>
-<aside class="pabar" id="pabar" aria-label="Store announcements"><div class="in"><b>Attention, shoppers</b><span id="pamsg" aria-live="off">Cleanup on aisle 3. Cleanup on aisle 4. Honestly, just clean up everywhere.</span><button id="papause" type="button" aria-label="Pause announcements">Pause</button></div></aside><link rel="stylesheet" href="/assets/subpage.css?v=1">
+<header class="sitehead" data-cms-lock><div class="in"><a class="brand" href="/" aria-label="DUDE and DADDY home"><img src="/favicon.svg" alt="" width="38" height="38"><b>DUDE &amp; DADDY</b></a><nav aria-label="Main"><a href="/">Home</a><a href="https://cleanuponaislescream.com/" data-x>The game</a><a href="https://cleanuponaislescream.com/how-to-play/" data-x>How to play</a><a href="https://cleanuponaislescream.com/staff/" data-x>Meet the staff</a><a href="/story/" aria-current="page">Our story</a><a href="https://cleanuponaislescream.com/updates/" data-x>What&rsquo;s new</a><a href="/press/">Press kit</a><button class="shift" id="shift" type="button" aria-pressed="false">Night shift</button></nav></div></header>
+<aside data-cms-lock class="pabar" id="pabar" aria-label="Store announcements"><div class="in"><b>Attention, shoppers</b><span id="pamsg" aria-live="off">Cleanup on aisle 3. Cleanup on aisle 4. Honestly, just clean up everywhere.</span><button id="papause" type="button" aria-label="Pause announcements">Pause</button></div></aside><link rel="stylesheet" href="/assets/subpage.css?v=1">
 <main class="wrap" id="main">
 
-  <p class="u-mt0 mono">Our story</p>
-  <h1>A dad, a kid and a mop.</h1>
+  <p data-cms="kicker" data-cms-type="text" data-cms-label="Small line above the headline" class="u-mt0 mono">Our story</p>
+  <h1 data-cms="headline" data-cms-type="text" data-cms-label="Big headline">A dad, a kid and a mop.</h1>
 
-  <p class="lede">DUDE &amp; DADDY LLC is a father-and-son game studio in Baton Rouge, Louisiana. We made it official on October 17, 2026.</p>
-  <h2>Who is who</h2>
+  <p data-cms="intro" data-cms-type="text" data-cms-label="Intro paragraph" class="lede">DUDE &amp; DADDY LLC is a father-and-son game studio in Baton Rouge, Louisiana. We made it official on October 17, 2026.</p>
+  <h2 data-cms="who-heading" data-cms-type="text" data-cms-label="Heading: who is who">Who is who</h2>
   <div class="cards">
-    <div class="card"><h3>Dude</h3><p>President &amp; Co-Founder. Makes the big calls about what the game is, what is funny and what is too spooky.</p></div>
-    <div class="card"><h3>Daddy</h3><p>CEO &amp; Co-Founder. Builds, fixes, publishes and says &ldquo;let&rsquo;s ask Dude&rdquo; a lot.</p></div>
+    <!-- cms:area id="people" label="People cards" -->
+    <!-- cms:block id="card-dude" label="Card: Dude" repeatable -->
+    <div class="card"><h3 data-cms="dude-name" data-cms-type="text" data-cms-label="Name">Dude</h3><p data-cms="dude-text" data-cms-type="text" data-cms-label="About">President &amp; Co-Founder. Makes the big calls about what the game is, what is funny and what is too spooky.</p></div>
+    <!-- /cms:block -->
+    <!-- cms:block id="card-daddy" label="Card: Daddy" repeatable -->
+    <div class="card"><h3 data-cms="daddy-name" data-cms-type="text" data-cms-label="Name">Daddy</h3><p data-cms="daddy-text" data-cms-type="text" data-cms-label="About">CEO &amp; Co-Founder. Builds, fixes, publishes and says &ldquo;let&rsquo;s ask Dude&rdquo; a lot.</p></div>
+    <!-- /cms:block -->
+    <!-- /cms:area -->
   </div>
-  <h2>How we make games</h2>
-  <p>Every big design decision is made together. We ask, we try it, we play it, and we keep what makes us laugh. The rule is funny-spooky and never gory, so it is fine for ages 11 and up.</p>
-  <h2>The first game</h2>
+  <h2 data-cms="how-heading" data-cms-type="text" data-cms-label="Heading: how we make games">How we make games</h2>
+  <p data-cms="how-text" data-cms-type="text" data-cms-label="How we make games">Every big design decision is made together. We ask, we try it, we play it, and we keep what makes us laugh. The rule is funny-spooky and never gory, so it is fine for ages 11 and up.</p>
+  <h2 data-cms="game-heading" data-cms-type="text" data-cms-label="Heading: the first game">The first game</h2>
   <p><a href="https://cleanuponaislescream.com" rel="noopener" class="u-ul">Clean Up On Aisle Scream!</a> is a first-person survival game about one week of night shifts at a grocery store. It plays in a web browser, on phones and tablets too, and it keeps growing with new nights, modes and surprises. See <a href="https://cleanuponaislescream.com/updates/" rel="noopener">what&rsquo;s new</a> or <a href="https://cleanuponaislescream.com/staff/" rel="noopener">meet the staff</a>.</p>
-  <h2>Say hi</h2>
-  <p>Ideas, bugs, fan art, a store you built that we should see: <a href="mailto:hello@dudeanddaddy.com">hello@dudeanddaddy.com</a>.</p>
-  <a class="btn" href="https://cleanuponaislescream.com" rel="noopener">Play the game</a>
+  <h2 data-cms="hi-heading" data-cms-type="text" data-cms-label="Heading: say hi">Say hi</h2>
+  <p data-cms="hi-text" data-cms-type="rich" data-cms-label="Say hi text">Ideas, bugs, fan art, a store you built that we should see: <a href="mailto:hello@dudeanddaddy.com">hello@dudeanddaddy.com</a>.</p>
+  <a data-cms="play-button" data-cms-type="link" data-cms-label="Play button" class="btn" href="https://cleanuponaislescream.com" rel="noopener">Play the game</a>
 </main>
 <div class="floor" aria-hidden="true"></div>
-<footer class="sitefoot"><div class="in">
+<footer class="sitefoot" data-cms-lock><div class="in">
   <div><p class="big">DUDE &amp; DADDY LLC</p><p>A father-and-son game studio.<br>Baton Rouge, Louisiana &middot; Est. 2026</p><p>Made by a father and a son. Mop included.</p></div>
   <div><h2>The studio</h2><ul><li><a href="/">Home</a></li><li><a href="/story/">Our story</a></li><li><a href="/diary/">Dev diary</a></li><li><a href="/merch/">Merch ideas</a></li><li><a href="/creators/">For creators</a></li><li><a href="/classroom/">Classroom</a></li><li><a href="/press/">Press kit</a></li><li><a href="/privacy/">Privacy</a></li><li><a href="mailto:hello@dudeanddaddy.com">Contact</a></li></ul></div>
   <div><h2>Clean Up On Aisle Scream!</h2><ul><li><a href="https://cleanuponaislescream.com/" data-x>Play the game</a></li><li><a href="https://dudeanddaddy.itch.io/clean-up-on-aisle-scream" rel="noopener">Play on itch.io</a></li><li><a href="https://cleanuponaislescream.com/how-to-play/" data-x>How to play</a></li><li><a href="https://cleanuponaislescream.com/updates/" data-x>What&rsquo;s new</a></li><li><a href="https://cleanuponaislescream.com/privacy/" data-x>Game privacy</a></li></ul></div>

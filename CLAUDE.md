@@ -14,8 +14,13 @@ Rob (Daddy) and his son (Dude) run DUDE & DADDY LLC; their game, Clean Up On Ais
   `npm run test:worker`. The list of what's watched: `status/src/assets.js`.
 - The game is a separate repo and domain. Don't change it from here (the status page only reads it).
 
+- `mainframe.json` + markers in the pages: Rob edits words, links and pictures with Mainframe (his CMS, ~/Studio).
+  How it works here and what is locked: `docs/MAINFRAME.md`. Marker check: `node scripts/check-markers.mjs --profile`
+  (also in `.github/workflows/ci.yml`, which only checks; Cloudflare Workers Builds still deploys).
+
 ## Rules
 - Never merge or deploy until Rob types "merge" for that PR in this session's chat. Merging to `main` deploys live.
+- Keep the Mainframe markers (`data-cms*`, `<!-- cms:… -->`) when editing pages by hand; run the marker check.
 - No inline `<style>`, `<script>` or `style=""` in pages (the CSP blocks them). Bump `?v=` when an asset changes.
 - No ads, no trackers. The news list is for 18+ only.
 - Rob is not a developer: short, plain answers, outcome first, tested / not tested. One small step at a time when he
