@@ -9,10 +9,11 @@ The rules are the Mainframe contract (`~/Studio/docs/CONTRACT.md`); this site's 
 - No build step. The files in `site/` are the pages, so the markers stay in what visitors get. They are only
   `data-cms*` attributes and `<!-- cms:… -->` comments: nothing visible changes.
 - Pages are `site/index.html` and `site/<name>/index.html`. `pages.route` uses folder routes
-  (`"site/*/index.html": "/{dir}/"`), which needs the folder-route rule in Mainframe core (keys containing "/"
-  match the whole path; `{dir}` = the page's folder). Until core has it, Mainframe shows every page as `/index`.
+  (`"site/*/index.html": "/{dir}/"`): keys containing "/" match the whole path and `{dir}` is the page's folder
+  (Mainframe core PR wiseguy002/studio#2). Until that is live, Mainframe shows every page as `/index`.
 - Hide/show works without a build: a hidden block is wrapped in `<template data-cms-hidden>`, which browsers never show.
-- Page settings (title, description) are not used here: titles and share text stay in each page's `<head>`, edited by Claude.
+- `"pageMeta": false`: no page settings (title, description, hide page) in Mainframe; titles and share text stay in
+  each page's `<head>`, edited by Claude.
 - New pictures go in `site/pictures/` (normal caching). `/assets/*` is cached for a year, so don't upload there.
 
 ## What Rob can edit

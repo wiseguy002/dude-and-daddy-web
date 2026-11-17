@@ -7,6 +7,7 @@
   "liveUrl": "https://dudeanddaddy.com",
   "previewUrl": "https://{slug}-studio.robewise.workers.dev",
   "siteRoot": "site/",
+  "pageMeta": false,
   "theme": {
     "mark": "site/favicon.svg",
     "light": { "page": "#F6F7FF", "panel": "#FFFFFF", "sidebar": "#1B0F36", "sidebarInk": "#FFD21F",
