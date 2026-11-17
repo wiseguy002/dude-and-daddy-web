@@ -1,0 +1,22 @@
+name: CI
+permissions:
+  contents: read
+
+# Checks only: Cloudflare Workers Builds deploys (main -> live, any other branch -> a preview version).
+on:
+  pull_request:
+  push:
+    branches: [main, 'mainframe/**', 'studio/**']
+
+jobs:
+  site:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: News list and Mainframe marker tests
+        run: node --test tests/*.mjs scripts/*.test.mjs
+      - name: Mainframe markers, required text and mainframe.json
+        run: node scripts/check-markers.mjs --profile
