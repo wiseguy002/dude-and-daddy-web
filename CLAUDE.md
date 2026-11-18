@@ -50,3 +50,6 @@ Rob (Daddy) and his son (Dude) run DUDE & DADDY LLC; their game, Clean Up On Ais
 - Trailing-slash redirects are 307 (Workers assets default); harmless, internal links already use the slash form.
 - Press kit zip (3 MB) and gameplay GIF (1 MB) are large but only load on the press page.
 - The game site's own /status/ page could link to status.dudeanddaddy.com (game repo).
+
+## Capabilities
+Read `docs/capabilities.md` before suggesting features (what is built, what needs setup); update it at every release.
