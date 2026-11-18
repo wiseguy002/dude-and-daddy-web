@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -sI https://dudeanddaddy.com)",
+      "Bash(curl -sI https://status.dudeanddaddy.com)",
+      "Bash(node --test tests/signup.test.mjs)",
+      "Bash(cd status && npm test)",
+      "Bash(cd status && npm run test:worker)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/scripts/check-databank.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
