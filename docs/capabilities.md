@@ -1,7 +1,7 @@
 # What dudeanddaddy.com can and cannot do (capabilities memory bank)
 
-**As of commit 9255f44 (no version numbers; last change: www redirect, PR #7), 2026-11-17.**
-Sources read: `CLAUDE.md`, `DEPLOY.md`, `status/README.md`, `wrangler.jsonc`, `worker/index.mjs`, `status/src/assets.js`,
+**As of commit 5e59699 (no version numbers; last change: Mainframe onboarding, PR #8), 2026-11-17.**
+Sources read: `CLAUDE.md`, `DEPLOY.md`, `docs/MAINFRAME.md`, `mainframe.json`, `.github/workflows/ci.yml`, `status/README.md`, `wrangler.jsonc`, `worker/index.mjs`, `status/src/assets.js`,
 `site/_headers`, `_redirects`, `sitemap.xml`, `site/assets/chrome.js`, the text of every page in `site/`. Not run or
 tested live today: this file is from code and notes only.
 
@@ -43,7 +43,7 @@ his son = "Dude"). A mostly plain-HTML site plus a tiny server for a news sign-u
 - ⚠️ **Resend segment copy**: the live key is *sending-only*, so new subscribers are kept in KV but NOT copied to the Resend segment. Rob must copy them by hand (or ask Claude) before a Broadcast. A full-access key would automate it (Rob chose least access).
 - 🧪 No known real subscriber send/Broadcast done yet ❓ (notes don't say).
 - Pull-request previews use an empty test list and have no mail secrets (form says closed).
-- Tests: `node --test tests/*.mjs` (`tests/signup.test.mjs`).
+- Tests: `node --test tests/*.mjs scripts/*.test.mjs` (`tests/signup.test.mjs`, `scripts/check-markers.test.mjs`).
 
 ## Status page and back office (`status/`)
 - ✅ **Public** status.dudeanddaddy.com: up/slow/down per asset, 90-day bars, notices. Watches the game (home, scores/co-op server, how-to-play, itch.io), the studio site (home, press kit, press zip, www redirect, `/game/` redirect, 404 page, diary), the news sign-up, email (MX, SPF, DKIM, DMARC), and provider status (Cloudflare, Resend, GitHub, Claude).
@@ -53,9 +53,18 @@ his son = "Dude"). A mostly plain-HTML site plus a tiny server for a news sign-u
 - Add something to watch: edit `status/src/assets.js`. Tests: `cd status && npm test`, `npm run test:worker`.
 - Other people: add to the Access policy AND `ADMIN_EMAILS`.
 
+## Mainframe editing (Rob's CMS, ~/Studio) — added by PR #8
+- ✅ `mainframe.json` + `data-cms*` attributes and `<!-- cms:… -->` comments in the pages let Rob edit words, links and pictures, and hide/move/copy some sections (name tags, history lines, people cards, diary notes, merch ideas), without a build. Which page parts are editable or locked: `docs/MAINFRAME.md`.
+- Draft = branch `mainframe/<8 hex>`; Publish merges to `main`, which deploys as usual.
+- ✅ Draft previews: Workers Builds makes a preview URL per branch (`<branch slug>-studio.robewise.workers.dev`), behind Cloudflare Access (Previews only, account members). Previews use the test KV list and no mail secrets. Pictures go in `site/pictures/`, not `/assets/` (cached a year).
+- ✅ Marker check: `node scripts/check-markers.mjs --profile`. CI (`.github/workflows/ci.yml`) runs it plus the tests on pull requests and on `main`, `mainframe/**`, `studio/**`; CI only checks, never deploys.
+- Locked from Mainframe: header, announcement bar, footer, sign-up form, privacy and `/news/` pages, `_headers`, `_redirects`, scripts, Worker, `wrangler.jsonc`, `mainframe.json`, CI file. `pageMeta` is off: titles and share text are edited by Claude.
+- ⚠️ Folder routes (`site/*/index.html` → `/{dir}/`) need Mainframe core PR wiseguy002/studio#2 live; until then Mainframe shows every page as `/index`.
+- Keep the markers when editing pages by hand; run the marker check.
+
 ## Hard limits and known leftovers
 - Not here: the game itself, scores, co-op, accounts, store/shop, payments, comments, chat. The site collects only email addresses for the news list.
-- No newsletter archive/web version, no subscriber admin UI, no analytics (on purpose), no CMS (pages are hand-edited HTML; not in Mainframe ❓).
+- No newsletter archive/web version, no subscriber admin UI, no analytics (on purpose), no CMS other than Mainframe (see below); pages are still plain HTML.
 - Merch page is ideas only; nothing sold. No contact form (only hello@dudeanddaddy.com via Cloudflare Email Routing).
 - Trailing-slash redirects are 307 (Workers default); harmless.
 - Press zip (3 MB) and gameplay GIF (1 MB) are big but only load on the press page.

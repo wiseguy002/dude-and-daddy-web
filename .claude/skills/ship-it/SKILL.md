@@ -17,7 +17,7 @@ Two things can ship from this repo. Work out which one the change touches.
 - Any step not covered here: check with Rob.
 
 ## Steps
-1. **Tests.** `node --test tests/*.mjs`. If `status/` changed: `cd status && npm test` and `cd status && npm run test:worker`. Run them; report real results.
+1. **Tests.** `node --test tests/*.mjs scripts/*.test.mjs` and `node scripts/check-markers.mjs --profile` (Mainframe markers; CI runs both). If `status/` changed: `cd status && npm test` and `cd status && npm run test:worker`. Run them; report real results.
 2. **Audit.**
    - Syntax check the changed JS (e.g. `node --check <file>`).
    - Pages: no inline `<style>`, `<script>` or `style=""` (the CSP blocks them); bump `?v=` on any asset that changed.
