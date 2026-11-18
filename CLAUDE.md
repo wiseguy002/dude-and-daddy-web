@@ -53,3 +53,13 @@ Rob (Daddy) and his son (Dude) run DUDE & DADDY LLC; their game, Clean Up On Ais
 
 ## Capabilities
 Read `docs/capabilities.md` before suggesting features (what is built, what needs setup); update it at every release.
+
+## Login security
+- Back office (status.dudeanddaddy.com/console + /api/console): Cloudflare Access app "DUDE & DADDY back office"
+  (`137efee2-…`), policy "Rob only" (`78219b3b-…`), Rob's email only. 2026-11-17: independent MFA required (Touch ID,
+  security key or authenticator app, 24h) on BOTH app and policy. Strangers get a 302 to Access login.
+- "Family store" app (family.cleanuponaislescream.com): deliberately NO MFA (family uses email codes). 2026-11-17 the
+  hub removed its "auth_method: pin" include rule (it let anyone with any email in); now only the 4 family emails.
+
+## Decisions
+- 2026-11-17: Rob wants MFA on the back office (done, see Login security); family store stays email-code only.
