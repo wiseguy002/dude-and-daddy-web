@@ -1,7 +1,7 @@
 {
-  "kit": "2.0.0",
+  "kit": "2.1.0",
   "files": {
-    "scripts/check-markers.mjs": "ab78be7abf22af70077861966120f88a2e57e13f"
+    "scripts/check-markers.mjs": "f3beb1d96a4159140d47b8d8445bec965df1f275"
   },
   "options": {}
 }

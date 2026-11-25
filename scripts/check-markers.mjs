@@ -1,4 +1,4 @@
-// Mainframe site kit 2.0.0: the shared safety check. Master copy lives in wiseguy002/mainframecms kit/check-markers.mjs;
+// Mainframe site kit 2.1.0: the shared safety check. Master copy lives in wiseguy002/mainframecms kit/check-markers.mjs;
 // Mainframe's "Update this site" keeps this file in step. Do not edit it in a site repo (Mainframe shows "Changed by hand").
 // Checks Mainframe markers (contract §2-4) in the page files Mainframe may edit, the site's posts and lists, and the profile.
 //   node <dir>/check-markers.mjs            markers in pages, partials, templates; posts; required text (sites with no build)
@@ -12,7 +12,7 @@ import { readFileSync, readdirSync, existsSync, realpathSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-export const KIT_VERSION = '2.0.0';
+export const KIT_VERSION = '2.1.0';
 const ID = /^[a-z0-9][a-z0-9-]{0,63}$/;
 const TYPES = new Set(['text', 'rich', 'link', 'image']);
 const VOID = new Set(['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source', 'track', 'wbr']);
@@ -31,7 +31,8 @@ const attrs = (s) => {
 // Elements with their spans: [{ tag, attrs, start, openEnd, closeStart, end }]
 function elements(html) {
   const out = [], stack = [];
-  for (const m of html.matchAll(/<!--[\s\S]*?-->|<(\/?)([a-zA-Z][a-zA-Z0-9]*)\b([^>]*)>/g)) {
+  // Comments end like browsers end them ("<!-->" and "<!--->" are complete); a quoted ">" inside a tag does not end the tag.
+  for (const m of html.matchAll(/<!--(?:-?>|[\s\S]*?--!?>)|<(\/?)([a-zA-Z][a-zA-Z0-9]*)\b((?:"[^"]*"|'[^']*'|[^>"'])*)>/g)) {
     if (m[0].startsWith('<!--')) continue;
     const [, close, rawTag, rest] = m, tag = rawTag.toLowerCase();
     if (!close) {
