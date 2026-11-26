@@ -1,0 +1,3 @@
+# Confirmed false alarms (Rob approved, 2026-11-26): Cloudflare Access audience ID (an identifier, not a password).
+# Only these exact past findings are ignored; anything new is still flagged.
+7a9b8499b43ea5f9f282be767d103e203f0df86b:status/wrangler.jsonc:generic-api-key:30
