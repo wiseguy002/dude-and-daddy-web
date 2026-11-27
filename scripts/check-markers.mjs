@@ -1,4 +1,4 @@
-// Mainframe site kit 2.1.0: the shared safety check. Master copy lives in wiseguy002/mainframecms kit/check-markers.mjs;
+// Mainframe site kit 2.2.0: the shared safety check. Master copy lives in wiseguy002/mainframecms kit/check-markers.mjs;
 // Mainframe's "Update this site" keeps this file in step. Do not edit it in a site repo (Mainframe shows "Changed by hand").
 // Checks Mainframe markers (contract §2-4) in the page files Mainframe may edit, the site's posts and lists, and the profile.
 //   node <dir>/check-markers.mjs            markers in pages, partials, templates; posts; required text (sites with no build)
@@ -12,7 +12,7 @@ import { readFileSync, readdirSync, existsSync, realpathSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-export const KIT_VERSION = '2.1.0';
+export const KIT_VERSION = '2.2.0';
 const ID = /^[a-z0-9][a-z0-9-]{0,63}$/;
 const TYPES = new Set(['text', 'rich', 'link', 'image']);
 const VOID = new Set(['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source', 'track', 'wbr']);
@@ -20,6 +20,47 @@ const RICH_TAGS = new Set(['p', 'h2', 'h3', 'ul', 'ol', 'li', 'strong', 'em', 'a
 // Safe addresses: no protocol-relative "//" or "/\\", no backslashes or control characters anywhere (browsers fix those up).
 const URL_RE = /^(https?:|mailto:|sms:|tel:|\/(?![\/\\])|#)/;
 const URL_OK = { test: (v) => URL_RE.test(v) && !/[\\\x00-\x1f\x7f]/.test(v) };
+// Lists of smaller sizes (srcset / sizes) on picture boxes and post pictures (contract §2 and §6). The same rule as
+// Mainframe's ui/srcset-rule.js, copied byte for byte (Mainframe's tests compare the two).
+// ---- size-list rule (start) ----
+const SRCSET_SIZE = /^(.*[^/])-w([1-9]\d{1,3})(\.[a-z0-9]+)$/i;
+const SRCSET_PART = /^(\S+)\s+([1-9]\d{0,4})w$/;
+const SIZES_PART = /^(?:\(max-width:\s?[1-9]\d{0,4}px\)\s)?[1-9]\d{0,3}(?:vw|px)$/;
+// null when the list is fine, else what is wrong in plain words. src is the picture's own address.
+export function srcsetProblem(src, srcset, sizes) {
+  if (srcset == null) return sizes == null ? null : 'has a sizes value but no list of sizes';
+  const s = String(src || '').trim();
+  if (!s.startsWith('/') || s.startsWith('//') || /[\s\\%?#\u0000-\u001f\u007f]/.test(s) || s.includes('..')) return 'lists sizes for a picture that is not on this site';
+  const parts = String(srcset).split(',').map((x) => x.trim());
+  if (!parts.length || parts.length > 6) return 'has a list of sizes that is empty or too long';
+  let main = null;
+  const widths = new Set();
+  for (const part of parts) {
+    const m = SRCSET_PART.exec(part);
+    if (!m) return `has a size "${part.slice(0, 60)}" not written as "address 640w"`;
+    const addr = m[1], w = Number(m[2]);
+    if (!addr.startsWith('/') || addr.startsWith('//') || /[\\%?#]/.test(addr) || addr.includes('..')) return `lists an outside address (${addr.slice(0, 60)})`;
+    if (widths.has(w)) return `lists ${w}w twice`;
+    widths.add(w);
+    if (addr === s) { if (main !== null) return 'lists the picture itself twice'; main = w; continue; }
+    const sm = SRCSET_SIZE.exec(addr);
+    if (!sm || sm[1] + sm[3] !== s) return `lists ${addr.slice(0, 60)}, which is not one of this picture's own sizes`;
+    if (Number(sm[2]) !== w) return `says ${w}w for ${addr.slice(0, 60)} (its name says ${sm[2]})`;
+  }
+  if (main === null) return 'must list the picture itself as its largest size';
+  for (const w of widths) if (w > main) return 'lists a size wider than the picture itself';
+  if (sizes == null) return null;
+  const sp = String(sizes).split(',').map((x) => x.trim());
+  for (let i = 0; i < sp.length; i++) {
+    if (sp[i] === 'auto' && i === 0 && sp.length > 1) continue;
+    if (!SIZES_PART.test(sp[i])) return `has a sizes value that is not allowed ("${String(sizes).slice(0, 60)}")`;
+  }
+  return null;
+}
+// The addresses a list names (for "every listed file exists").
+export const srcsetAddresses = (srcset) => String(srcset || '').split(',').map((x) => x.trim().split(/\s+/)[0]).filter(Boolean);
+// ---- size-list rule (end) ----
+
 // Attribute names lowercased; the FIRST copy wins, as in browsers. `dup` lists names written twice.
 const attrs = (s) => {
   const out = {}, dup = [];
@@ -50,17 +91,39 @@ function elements(html) {
   return out;
 }
 
+// A picture in a post (a collection listing "img" in bodyTags): src on this site, a real description, whole-number
+// width / height, loading lazy or eager, and a size list that follows the rule. Nothing else.
+const IMG_ATTRS = new Set(['src', 'alt', 'width', 'height', 'loading', 'srcset', 'sizes']);
+function checkImg(rest, id) {
+  const errs = [], a = {};
+  for (const [, k, v] of rest.matchAll(/ ([a-z]+)="([^"]*)"/g)) {
+    if (k in a) errs.push(`rich field "${id}" repeats attribute ${k} on <img>`);
+    a[k] = v;
+    if (!IMG_ATTRS.has(k)) errs.push(`rich field "${id}" has attribute ${k} on <img> (not allowed)`);
+  }
+  if (!/^\/(?![\/\\])/.test(a.src || '') || /[\\\x00-\x1f\x7f]/.test(a.src || '')) errs.push(`rich field "${id}" has a picture "${a.src || ''}" that is not on this site`);
+  if (!/[\p{L}\p{N}]/u.test(a.alt || '')) errs.push(`rich field "${id}" has a picture with no description (alt)`);
+  for (const k of ['width', 'height']) if (k in a && !/^[1-9]\d{0,4}$/.test(a[k])) errs.push(`rich field "${id}" has a picture ${k} that is not a whole number`);
+  if ('loading' in a && !['lazy', 'eager'].includes(a.loading)) errs.push(`rich field "${id}" has a picture loading that is not lazy or eager`);
+  if ('srcset' in a || 'sizes' in a) {
+    const why = srcsetProblem(a.src, 'srcset' in a ? a.srcset : null, 'sizes' in a ? a.sizes : null);
+    if (why) errs.push(`rich field "${id}" has a picture whose list of smaller sizes is not allowed: it ${why}`);
+  }
+  return errs;
+}
+
 // Strict: every "<" must start a complete allowlisted tag written as <tag> or <tag name="value" …>
 // (lowercase, single spaces, double-quoted values only). Anything else is refused, never guessed at.
 const TAG = /^<(\/?)([a-z][a-z0-9]*)((?: [a-z]+="[^"<>]*")*)\s*(\/?)\s*>/;
-function checkRich(inner, id) {
-  const errs = [];
+function checkRich(inner, id, tags = null) {
+  const errs = [], allowed = tags ? new Set([...tags.filter((t) => RICH_TAGS.has(t) || t === 'img'), 'br']) : RICH_TAGS;
   for (let i = inner.indexOf('<'); i >= 0; i = inner.indexOf('<', i + 1)) {
     const m = inner.slice(i).match(TAG);
     if (!m) { errs.push(`rich field "${id}" has a "<" that is not a simple allowed tag: ${JSON.stringify(inner.slice(i, i + 40))}`); continue; }
     const [, close, tag, rest] = m;
-    if (!RICH_TAGS.has(tag)) { errs.push(`rich field "${id}" has <${tag}> (not allowed)`); continue; }
+    if (!allowed.has(tag)) { errs.push(`rich field "${id}" has <${tag}> (not allowed)`); continue; }
     if (close && rest) { errs.push(`rich field "${id}" has attributes on </${tag}>`); continue; }
+    if (tag === 'img') { if (!close) errs.push(...checkImg(rest, id)); continue; }
     const seenAttr = new Set();
     for (const [, k, v] of rest.matchAll(/ ([a-z]+)="([^"]*)"/g)) {
       if (seenAttr.has(k)) errs.push(`rich field "${id}" repeats attribute ${k} on <${tag}>`);
@@ -105,6 +168,10 @@ export function checkFile(html, file) {
       else if (f.attrs.alt === '' && !('data-cms-decorative' in f.attrs)) errs.push(`image field "${id}" has empty alt without data-cms-decorative`);
       if (f.tag === 'img' && (!/^(https:|\/(?![\/\\]))/.test(f.attrs.src || '') || /[\\\x00-\x1f\x7f]/.test(f.attrs.src || ''))) errs.push(`image field "${id}" has a src "${f.attrs.src || ''}" that is not allowed (https: or /…)`);
       if (els.some((p) => p.tag === 'picture' && p.start < f.start && f.end <= p.end)) errs.push(`image field "${id}" is inside <picture> (not supported in v1)`);
+      if (f.tag === 'img' && ('srcset' in f.attrs || 'sizes' in f.attrs)) {
+        const why = srcsetProblem(f.attrs.src, 'srcset' in f.attrs ? f.attrs.srcset : null, 'sizes' in f.attrs ? f.attrs.sizes : null);
+        if (why) errs.push(`image field "${id}" has a list of smaller sizes that is not allowed: it ${why}`);
+      }
     }
     for (const o of fields) if (o !== f && o.start < f.start && f.end <= o.end) errs.push(`field "${id}" is inside field "${o.attrs['data-cms']}"`);
     for (const l of locks) if (l.start <= f.start && f.end <= l.end) errs.push(`field "${id}" is inside a lock`);
@@ -145,7 +212,7 @@ export function checkFile(html, file) {
 }
 
 // Post bodies (contract §7): only the rich-text allowlist (tags, href on a, class="note" on p, safe URLs).
-export const checkPost = (body, file) => checkRich(body, 'body').map((e) => `${file}: ${e.replace('rich field "body"', 'post body')}`);
+export const checkPost = (body, file, tags = null) => checkRich(body, 'body', tags).map((e) => `${file}: ${e.replace('rich field "body"', 'post body')}`);
 
 // ---- Files named by the profile ----
 // Same tiny glob as Mainframe (src/glob.js): "*" within one folder, "**" across folders.
@@ -206,7 +273,8 @@ export function checkCollections(root, p = readProfile(root)) {
     const meta = Object.fromEntries(m[1].split(/\r?\n/).map((l) => [l.slice(0, l.indexOf(':')).trim(), l.slice(l.indexOf(':') + 1).trim()]));
     if (!meta.title) errs.push(`${file}: needs a title`);
     if (meta.status && !['draft', 'published'].includes(meta.status)) errs.push(`${file}: status must be draft or published`);
-    errs.push(...checkPost(src.slice(m[0].length), file));
+    const c = (p.collections || []).find((x) => file.startsWith(x.folder.replace(/\/$/, '') + '/'));
+    errs.push(...checkPost(src.slice(m[0].length), file, c && Array.isArray(c.bodyTags) && c.bodyTags.includes('img') ? c.bodyTags : null));
   }
   return errs;
 }
@@ -326,12 +394,36 @@ function runWithoutProfile(root) {
   return { errs, n };
 }
 
+// Every file a picture box or post picture lists as a smaller size must be in the site (a broken list fails here,
+// so it can never be published). Addresses map to files the way Mainframe maps them: "/assets/x.png" -> "site/assets/x.png".
+export function siteRootOf(p) {
+  if (typeof p.siteRoot === 'string') return p.siteRoot.replace(/\/?$/, '/').replace(/^\/$/, '');
+  const parts = (p.media?.folder || '').split('/').filter(Boolean);
+  return parts.length >= 2 ? parts[0] + '/' : '';
+}
+export function checkSizeFiles(root, p, pageList, postList) {
+  const errs = [], base = siteRootOf(p);
+  const look = (file, html, onlyFields) => {
+    for (const el of elements(html)) {
+      if (el.tag !== 'img' || !('srcset' in el.attrs) || (onlyFields && el.attrs['data-cms-type'] !== 'image')) continue;
+      for (const addr of srcsetAddresses(el.attrs.srcset)) {
+        if (!addr.startsWith('/') || addr.includes('..')) continue; // the rule itself reports these
+        if (!existsSync(join(root, base + addr.slice(1)))) errs.push(`${file}: the picture ${el.attrs.src || ''} lists ${addr}, which is not in the site`);
+      }
+    }
+  };
+  for (const f of pageList) look(f, readFileSync(join(root, f), 'utf8'), true);
+  for (const f of postList) look(f, readFileSync(join(root, f), 'utf8'), false);
+  return errs;
+}
+
 export function run(root, argv) {
   if (!profileFile(root) && !argv.includes('--profile')) { const { errs, n } = runWithoutProfile(root); return { errs, message: `Markers OK in ${n} file(s) (site kit ${KIT_VERSION}).` }; }
   const errs = [], p = readProfile(root);
   const files = [...pageFiles(root, p), ...(p.partials || []).map((x) => x.file), ...(p.templates || []).map((x) => x.file)].filter((f) => existsSync(join(root, f)));
   for (const f of files) errs.push(...checkFile(readFileSync(join(root, f), 'utf8'), f));
   errs.push(...checkCollections(root, p));
+  errs.push(...checkSizeFiles(root, p, files, collectionFiles(root, p)));
   if (p.pageMeta === false) errs.push(...checkRequired(root, p));
   if (argv.includes('--profile')) errs.push(...checkProfile(root));
   if (argv.includes('--built')) {
