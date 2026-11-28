@@ -1,5 +1,54 @@
 # dudeanddaddy.com (studio website) + status.dudeanddaddy.com
 
+<!-- tagteam:start (managed by the tagteam tool; change rules/tag-team.md in TagTeam, not this copy) -->
+## Tag team: two Claude accounts share this repo
+
+CORE RULES:
+- Always read CLAUDE.md and HANDOFF.md before editing code.
+- Never commit directly to main or master. Merging into main needs the owner's yes.
+- The home branch is the one on HANDOFF.md's `Branch:` line. Work on any local branch or worktree, but first bring the
+  home branch in (`git fetch`, then `git merge --ff-only origin/<home branch>`) and push back to it at handoff.
+- Keep changes atomic. Verify syntax or run tests before handing off.
+- Never put `.env` files, keys or other secrets in a commit. Never force-push.
+- These rules win over "feature branches stay local": handoff pushes to the home branch so the other account gets it.
+
+HANDOFF.md always starts with these three lines under its title:
+
+    Handoff code: TT-<yyyymmdd>-<n>
+    Branch: <home branch>
+    Next step: <one line>
+
+ONE-WORD COMMANDS (execute exactly, no extra questions):
+
+1. handoff
+   a) Check modified files for syntax or type errors, and run the tests if there are any.
+   b) Stage the work and commit it with a conventional message (feat:, fix:, refactor:).
+   c) Update HANDOFF.md: the three lines above (new code: today's date, n one higher than before), then Branch &
+      Latest Commit, Completed, Modified Files (exact paths), Do Not Repeat, Known Issues / Tests, Next Immediate Step.
+   d) Commit HANDOFF.md ("docs: update handoff notes").
+   e) If gitleaks is installed, run `gitleaks git . --no-banner --redact`; a finding stops the handoff.
+   f) Push to the home branch: `git push origin HEAD:<home branch>`. Check the push succeeded. If it was refused,
+      fetch, merge, and push again; if that fails, say so and do not call it safe.
+   g) Reply only: "Committed, pushed, and saved to HANDOFF.md. Safe to switch accounts. Code: <new code>"
+
+2. resume
+   a) Read CLAUDE.md and HANDOFF.md. Bring in the home branch (see CORE RULES). If uncommitted work blocks that,
+      say so and stop.
+   b) Your first reply is exactly these four lines, nothing before them:
+      Handoff code: <code>
+      Branch: <home branch>
+      Last commit: <short hash> <subject>
+      Next step: <one line>
+   c) If the code is missing, or `git diff --quiet "$(git log -1 --format=%H origin/<home branch> -- HANDOFF.md)"
+      origin/<home branch>` fails (work was added after the handoff), say so and stop.
+   d) Immediately start the next step.
+
+3. review
+   - Bring in the home branch, then diff the files listed in HANDOFF.md against main.
+   - Look for edge cases, security issues, missing tests, and violations of CLAUDE.md.
+   - Fix problems and commit, then finish with the handoff steps above.
+<!-- tagteam:end -->
+
 Read `DEPLOY.md` for how the site is hosted (Cloudflare Worker `studio`, deploys on every push to `main`).
 Rob (Daddy) and his son (Dude) run DUDE & DADDY LLC; their game, Clean Up On Aisle Scream!, has its own repo
 (`wiseguy002/clean-up-on-aisle-scream`, local `~/Clean Up On Aisle Scream`) and owns cleanuponaislescream.com.
